@@ -135,7 +135,11 @@ public class Controller {
                     overrideTags.isSelected(), fixEncoding.isSelected(), renameAsBeatmap, filterDuplicates.isSelected(),
                     seconds);
             Exporter exporter = new Exporter(this, settings);
-            exporter.start();
+            progressText.textProperty().bind(exporter.messageProperty());
+            progress.progressProperty().bind(exporter.progressProperty());
+            Thread thread = new Thread(exporter);
+            thread.setDaemon(true);
+            thread.start();
         }
     }
 }
