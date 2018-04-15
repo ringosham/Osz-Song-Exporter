@@ -5,12 +5,15 @@ import com.ringosham.objects.Settings;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.DirectoryChooser;
 
-import javax.swing.*;
 import java.io.File;
 
 public class Controller {
     //All UI elements
+    @FXML
+    private FlowPane pane;
     @FXML
     public Label progressText;
     @FXML
@@ -44,13 +47,6 @@ public class Controller {
 
     @FXML
     private void initialize() {
-        //Look and feel
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
         //UI initialization
         String convertTooltip = "Some old beatmaps may use ogg files instead of mp3. While disabling this will ensure audio quality, " +
                 "you may risk copying duplicate songs";
@@ -71,18 +67,26 @@ public class Controller {
         filterDuplicates.setTooltip(new Tooltip(filterTooltip));
         renameBeatmap.setTooltip(new Tooltip(renameTooltip));
         addTags.setTooltip(new Tooltip(addTagTooltip));
+
+        //Some checks to make sure stuff works
         if (!beatmapDir.isDirectory()) {
-            JOptionPane.showConfirmDialog(null, "Cannot find osu! installation. Please select your osu! installation folder.", "Osu! folder not found", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-            JFileChooser chooser = new JFileChooser();
-            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int result = chooser.showDialog(null, "Select osu! install directory");
-            if (result == JFileChooser.APPROVE_OPTION)
-                beatmapDir = chooser.getSelectedFile();
-            else if (result == JFileChooser.CANCEL_OPTION)
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Osu! folder not found");
+            alert.setContentText("Cannot find osu! installation. Please select your osu! installation folder.");
+            alert.showAndWait();
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle("Select osu! install directory");
+            File newBeatmapDir = chooser.showDialog(pane.getScene().getWindow());
+            if (newBeatmapDir != null)
+                beatmapDir = newBeatmapDir;
+            else
                 Platform.exit();
         }
         if (!beatmapDir.canRead()) {
-            JOptionPane.showConfirmDialog(null, "Please fix the permission of your osu! installation folder", "Cannot read osu! folder", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Cannot read osu! folder");
+            alert.setContentText("Please fix the permission of your osu! installation folder");
+            alert.showAndWait();
             Platform.exit();
         }
         progressText.setText("Ready. " + beatmapDir.listFiles(File::isDirectory).length + " songs found. (Estimate)");
@@ -121,10 +125,10 @@ public class Controller {
 
     @FXML
     private void onExportButtonClick() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int result = chooser.showDialog(null, "Start export process");
-        if (result == JFileChooser.APPROVE_OPTION) {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Select export directory");
+        File exportDirectory = chooser.showDialog(pane.getScene().getWindow());
+        if (exportDirectory != null) {
             boolean renameAsBeatmap = ((RadioButton) renameOptions.getSelectedToggle()).getText().equals("Rename after beatmap");
             int seconds;
             if (!filterDuplicates.isSelected())
@@ -133,7 +137,7 @@ public class Controller {
                 seconds = Integer.parseInt(filterSeconds.getText());
             Settings settings = new Settings(convertCheckbox.isSelected(), filterPractice.isSelected(), addTags.isSelected(),
                     overrideTags.isSelected(), fixEncoding.isSelected(), renameAsBeatmap, filterDuplicates.isSelected(),
-                    seconds);
+                    seconds, exportDirectory);
             Exporter exporter = new Exporter(this, settings);
             progressText.textProperty().bind(exporter.messageProperty());
             progress.progressProperty().bind(exporter.progressProperty());

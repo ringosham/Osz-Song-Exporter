@@ -33,6 +33,7 @@ public class Exporter extends Task<Void> {
         ui.exportButton.setDisable(true);
         updateMessage("Analysing beatmaps...");
         Hasher hasher = new Hasher();
+        //FIXME Acquire return value from task
         hasher.addEventFilter(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> songList = hasher.getValue());
         ui.progress.progressProperty().bind(hasher.progressProperty());
         Thread hashThread = new Thread(hasher);

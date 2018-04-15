@@ -1,5 +1,7 @@
 package com.ringosham.objects;
 
+import java.io.File;
+
 public class Settings {
 
     private boolean convertOgg;
@@ -10,9 +12,10 @@ public class Settings {
     private boolean renameAsBeatmap;
     private boolean filterDuplicates;
     private int filterSeconds;
+    private File exportDirectory;
 
 
-    public Settings(boolean convertOgg, boolean filterPractice, boolean applyTags, boolean overrideTags, boolean fixEncoding, boolean renameAsBeatmap, boolean filterDuplicates, int filterSeconds) {
+    public Settings(boolean convertOgg, boolean filterPractice, boolean applyTags, boolean overrideTags, boolean fixEncoding, boolean renameAsBeatmap, boolean filterDuplicates, int filterSeconds, File exportDirectory) {
         this.convertOgg = convertOgg;
         this.filterPractice = filterPractice;
         this.applyTags = applyTags;
@@ -21,6 +24,7 @@ public class Settings {
         this.renameAsBeatmap = renameAsBeatmap;
         this.filterDuplicates = filterDuplicates;
         this.filterSeconds = filterSeconds;
+        this.exportDirectory = exportDirectory;
     }
 
     public boolean isConvertOgg() {
@@ -53,5 +57,9 @@ public class Settings {
 
     public int getFilterSeconds() {
         return filterSeconds;
+    }
+
+    public File getExportDirectory() {
+        return exportDirectory;
     }
 }
