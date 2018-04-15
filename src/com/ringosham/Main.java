@@ -10,7 +10,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{
-        //TODO Hashing songs
         //TODO Remove duplicates
         //TODO Basic copying
         //TODO Renaming options (Keep original file name (not recommended. Automatically add suffix to the name), or rename it after beatmap name)
