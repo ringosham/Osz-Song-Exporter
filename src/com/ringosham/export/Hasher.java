@@ -11,16 +11,18 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
-public class Hasher extends Task<LinkedList<Song>> {
+public class Hasher extends Task<List<Song>> {
 
     @Override
-    protected LinkedList<Song> call() {
+    protected List<Song> call() {
         long workDone = 0;
-        LinkedList<Song> song = new LinkedList<>();
+        List<Song> song = new LinkedList<>();
         long progressMax = Controller.beatmapDir.listFiles(File::isDirectory).length;
         for (File beatmap : Controller.beatmapDir.listFiles(File::isDirectory)) {
+            //We only need to look for one single beatmap file. This doesn't need to loop
             for (File osuFile : Objects.requireNonNull(beatmap.listFiles(pathname -> pathname.getName().endsWith(".osu")))) {
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(osuFile));

@@ -4,7 +4,6 @@ import com.ringosham.controllers.Controller;
 import com.ringosham.objects.Settings;
 import com.ringosham.objects.Song;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public class Exporter extends Task<Void> {
     static List<String> failSongs = new ArrayList<>();
 
     //Export variables
-    private LinkedList<Song> songList = new LinkedList<>();
+    private List<Song> songList = new LinkedList<>();
 
     public Exporter(Controller ui, Settings settings) {
         this.ui = ui;
@@ -33,13 +32,14 @@ public class Exporter extends Task<Void> {
         ui.exportButton.setDisable(true);
         updateMessage("Analysing beatmaps...");
         Hasher hasher = new Hasher();
-        //FIXME Acquire return value from task
-        hasher.addEventFilter(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> songList = hasher.getValue());
+        hasher.setOnSucceeded(event -> songList = hasher.getValue());
         ui.progress.progressProperty().bind(hasher.progressProperty());
         Thread hashThread = new Thread(hasher);
         hashThread.start();
         try {
             hashThread.join(0);
+            //Wait for the onSucceeded listener
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -47,6 +47,7 @@ public class Exporter extends Task<Void> {
             System.out.println("Title: " + song.getTitle());
             System.out.println("Author: " + song.getAuthor());
             System.out.println("Duration: " + song.getDuration());
+            System.out.println("Is ogg: " + song.isOgg());
         }
         ui.exportButton.setDisable(false);
         return null;
