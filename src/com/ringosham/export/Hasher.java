@@ -89,7 +89,8 @@ public class Hasher extends Task<List<Song>> {
                         song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, false));
                     } else {
                         VorbisFile vorbisFile = new VorbisFile(fileLocation);
-                        duration = fileLocation.length() / vorbisFile.getInfo().getBitrateNominal();
+                        //Nominal bitrate is not accurate enough. About 10 seconds in error
+                        duration = (fileLocation.length() * 8) / vorbisFile.getInfo().getBitrateNominal();
                         song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, true));
                     }
                 } catch (Exception e) {
