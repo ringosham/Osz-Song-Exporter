@@ -6,6 +6,7 @@ public class Settings {
 
     private boolean convertOgg;
     private boolean filterPractice;
+    private boolean overwrite;
     private boolean applyTags;
     private boolean overrideTags;
     private boolean fixEncoding;
@@ -15,9 +16,10 @@ public class Settings {
     private File exportDirectory;
 
 
-    public Settings(boolean convertOgg, boolean filterPractice, boolean applyTags, boolean overrideTags, boolean fixEncoding, boolean renameAsBeatmap, boolean filterDuplicates, int filterSeconds, File exportDirectory) {
+    public Settings(boolean convertOgg, boolean filterPractice, boolean overwrite,  boolean applyTags, boolean overrideTags, boolean fixEncoding, boolean renameAsBeatmap, boolean filterDuplicates, int filterSeconds, File exportDirectory) {
         this.convertOgg = convertOgg;
         this.filterPractice = filterPractice;
+        this.overwrite = overwrite;
         this.applyTags = applyTags;
         this.overrideTags = overrideTags;
         this.fixEncoding = fixEncoding;
@@ -61,5 +63,9 @@ public class Settings {
 
     public File getExportDirectory() {
         return exportDirectory;
+    }
+
+    public boolean isOverwrite() {
+        return overwrite;
     }
 }

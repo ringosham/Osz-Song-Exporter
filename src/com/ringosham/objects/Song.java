@@ -12,6 +12,7 @@ public class Song {
     private String unicodeTitle;
     private String unicodeAuthor;
     private boolean isOgg;
+    private boolean isFullVersion;
 
     public Song(String hash, File fileLocation, String title, String author, long duration, File outputLocation, String unicodeTitle, String unicodeAuthor, boolean isOgg) {
         this.hash = hash;
@@ -69,5 +70,17 @@ public class Song {
 
     public void setOutputLocation(File outputLocation) {
         this.outputLocation = outputLocation;
+    }
+
+    public void setFileLocation(File fileLocation) {
+        this.fileLocation = fileLocation;
+    }
+
+    public boolean isFullVersion() {
+        return isFullVersion;
+    }
+
+    public void setFullVersion(boolean fullVersion) {
+        isFullVersion = fullVersion;
     }
 }

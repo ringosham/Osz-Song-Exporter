@@ -33,7 +33,7 @@ public class Hasher extends Task<List<Song>> {
                     String author = null;
                     String unicodeTitle = null;
                     String unicodeAuthor = null;
-                    long duration = 0;
+                    long duration;
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("AudioFilename: "))
                             fileLocation = new File(beatmap.getAbsolutePath() + "/" + line.replace("AudioFilename: ", ""));
@@ -52,12 +52,12 @@ public class Hasher extends Task<List<Song>> {
                     //Hashing is mandatory to remove completely identical songs
                     if (hash == null) {
                         FileInputStream stream;
-                        //Old osu maps uses md5 as well
+                        //Old osu maps uses md5 to store the hash, but new ones don't
                         final MessageDigest md5 = MessageDigest.getInstance("MD5");
                         final byte[] buffer = new byte[1024 * 1024];
                         try {
                             stream = new FileInputStream(fileLocation);
-                            int byteRead = 0;
+                            int byteRead;
                             while ((byteRead = stream.read(buffer)) >= 0)
                                 if (byteRead > 0)
                                     md5.update(buffer, 0, byteRead);
@@ -76,7 +76,7 @@ public class Hasher extends Task<List<Song>> {
                         String finalAuthor = author;
                         player.setOnError(() -> {
                             Exporter.failCount++;
-                            Exporter.failSongs.add(finalTitle + " - " + finalAuthor);
+                            System.out.println("Failed reading MP3: " + finalTitle + " - " + finalAuthor);
                             player.getError().printStackTrace();
                             player.dispose();
                         });
@@ -94,6 +94,7 @@ public class Hasher extends Task<List<Song>> {
                         song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, true));
                     }
                 } catch (Exception e) {
+                    System.out.println("Failed reading beatmap: " + beatmap.getName());
                     e.printStackTrace();
                 }
                 break;
@@ -101,7 +102,6 @@ public class Hasher extends Task<List<Song>> {
             workDone++;
             updateProgress(workDone, progressMax);
         }
-        System.out.println("Analysing complete");
         return song;
     }
 }

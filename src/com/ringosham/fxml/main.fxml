@@ -7,12 +7,14 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
 <FlowPane fx:id="pane" alignment="center" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="400.0" prefHeight="283.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ringosham.controllers.Controller">
     <padding>
@@ -22,7 +24,7 @@
     <ProgressBar fx:id="progress" prefHeight="18.0" prefWidth="396.0" progress="0.0" />
     <Separator prefHeight="31.0" prefWidth="314.0" visible="false" />
     <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportButtonClick" text="Start export" />
-   <Separator orientation="VERTICAL" prefHeight="18.0" prefWidth="394.0" visible="false" />
+   <Separator orientation="VERTICAL" prefHeight="3.0" prefWidth="394.0" visible="false" />
    <Label text="Hover the cursor on the options to see the description!" />
     <GridPane prefHeight="120.0" prefWidth="396.0">
         <columnConstraints>
@@ -38,7 +40,7 @@
         </rowConstraints>
         <CheckBox fx:id="convertCheckbox" mnemonicParsing="false" text="Convert ogg to mp3" />
         <CheckBox fx:id="filterPractice" mnemonicParsing="false" text="Filter practice maps" GridPane.rowIndex="1" />
-        <CheckBox fx:id="addTags" mnemonicParsing="false" onAction="#onAddTagChecked" text="Apply mp3 tags" GridPane.rowIndex="2" />
+        <CheckBox fx:id="addTags" mnemonicParsing="false" onAction="#onAddTagChecked" text="Apply mp3 tags and album art" GridPane.rowIndex="2" />
         <CheckBox fx:id="overrideTags" mnemonicParsing="false" text="Override current mp3 tags" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <Label text="Renaming options" GridPane.rowIndex="3" />
         <RadioButton fx:id="renameBeatmap" mnemonicParsing="false" selected="true" text="Rename after beatmap" GridPane.rowIndex="4">
@@ -46,10 +48,16 @@
                <ToggleGroup fx:id="renameOptions" />
            </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="keepOriginal" mnemonicParsing="false" text="Keep original (Not recommend)" toggleGroup="$renameOptions" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <RadioButton fx:id="useBeatmapID" mnemonicParsing="false" text="Using beatmap ID (Deprecated)" toggleGroup="$renameOptions" GridPane.columnIndex="1" GridPane.rowIndex="4" />
         <CheckBox fx:id="fixEncoding" mnemonicParsing="false" text="Fix mp3 tag encoding" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <CheckBox fx:id="overwriteCheckbox" mnemonicParsing="false" text="Overwrite existing copy" GridPane.columnIndex="1" />
     </GridPane>
    <CheckBox fx:id="filterDuplicates" mnemonicParsing="false" onAction="#onFilterDuplicatesChecked" text="Filter duplicate songs if their length difference is less than " />
    <TextField fx:id="filterSeconds" prefHeight="25.0" prefWidth="29.0" />
    <Label text=" seconds" />
+   <Separator orientation="VERTICAL" prefHeight="9.0" prefWidth="13.0" visible="false" />
+   <TextArea fx:id="consoleArea" editable="false" prefHeight="94.0" prefWidth="410.0" wrapText="true">
+      <font>
+         <Font name="Consolas" size="12.0" />
+      </font></TextArea>
 </FlowPane>
