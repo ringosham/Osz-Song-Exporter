@@ -54,7 +54,8 @@ public class Hasher extends Task<List<Song>> {
                             Pattern pattern = Pattern.compile("0,0,\"(.+)\"");
                             Matcher matcher = pattern.matcher(line);
                             if (matcher.find())
-                            albumArt = new File(beatmap.getAbsolutePath() + "/" + matcher.group(1));
+                                albumArt = new File(beatmap.getAbsolutePath() + "/" + matcher.group(1));
+                            break;
                         }
                     }
 
