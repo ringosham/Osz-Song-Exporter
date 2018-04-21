@@ -13,8 +13,9 @@ public class Song {
     private String unicodeAuthor;
     private boolean isOgg;
     private boolean isFullVersion;
+    private File albumArt;
 
-    public Song(String hash, File fileLocation, String title, String author, long duration, File outputLocation, String unicodeTitle, String unicodeAuthor, boolean isOgg) {
+    public Song(String hash, File fileLocation, String title, String author, long duration, File outputLocation, String unicodeTitle, String unicodeAuthor, File albumArt, boolean isOgg) {
         this.hash = hash;
         this.fileLocation = fileLocation;
         this.title = title;
@@ -23,6 +24,7 @@ public class Song {
         this.outputLocation = outputLocation;
         this.unicodeTitle = unicodeTitle;
         this.unicodeAuthor = unicodeAuthor;
+        this.albumArt = albumArt;
         this.isOgg = isOgg;
     }
 
@@ -82,5 +84,9 @@ public class Song {
 
     public void setFullVersion(boolean fullVersion) {
         isFullVersion = fullVersion;
+    }
+
+    public File getAlbumArt() {
+        return albumArt;
     }
 }

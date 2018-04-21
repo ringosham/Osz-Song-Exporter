@@ -13,6 +13,8 @@ import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Hasher extends Task<List<Song>> {
 
@@ -33,6 +35,7 @@ public class Hasher extends Task<List<Song>> {
                     String author = null;
                     String unicodeTitle = null;
                     String unicodeAuthor = null;
+                    File albumArt = null;
                     long duration;
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("AudioFilename: "))
@@ -47,6 +50,12 @@ public class Hasher extends Task<List<Song>> {
                             unicodeTitle = line.replace("TitleUnicode:", "");
                         if (line.startsWith("ArtistUnicode:"))
                             unicodeAuthor = line.replace("ArtistUnicode:", "");
+                        if (line.matches("0,0,\"(.+)\"")) {
+                            Pattern pattern = Pattern.compile("0,0,\"(.+)\"");
+                            Matcher matcher = pattern.matcher(line);
+                            if (matcher.find())
+                            albumArt = new File(beatmap.getAbsolutePath() + "/" + matcher.group(1));
+                        }
                     }
 
                     //Hashing is mandatory to remove completely identical songs
@@ -86,12 +95,12 @@ public class Hasher extends Task<List<Song>> {
                             duration = (long) mediaFile.getDuration().toSeconds();
                         else
                             break;
-                        song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, false));
+                        song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, albumArt, false));
                     } else {
                         VorbisFile vorbisFile = new VorbisFile(fileLocation);
                         //Nominal bitrate is not accurate enough. About 10 seconds in error
                         duration = (fileLocation.length() * 8) / vorbisFile.getInfo().getBitrateNominal();
-                        song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, true));
+                        song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, albumArt, true));
                     }
                 } catch (Exception e) {
                     System.out.println("Failed reading beatmap: " + beatmap.getName());

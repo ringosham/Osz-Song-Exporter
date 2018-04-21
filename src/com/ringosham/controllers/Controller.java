@@ -56,8 +56,8 @@ public class Controller {
     @FXML
     private void initialize() {
         //UI initialization
-        String convertTooltip = "Some old beatmaps may use ogg files instead of mp3. While disabling this will ensure audio quality, " +
-                "you may risk copying duplicate songs";
+        String convertTooltip = "Some old beatmaps may use ogg files instead of mp3. Disabling this will ensure audio quality, " +
+                "but your music player will likely not able to read ogg tags (Album arts and song info)";
         String encodingTooltip = "Some very old mp3s have different encoding in their tags. This is why some songs appear as ????? in your music player";
         String addTagTooltip = "Automatically add mp3 tags based on beatmap info to the exported songs";
         String overrideTooltip = "Overrides the existing mp3 tag, in case you don't like it.";
