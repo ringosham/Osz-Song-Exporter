@@ -1,5 +1,6 @@
 package com.ringosham.controllers;
 
+import com.ringosham.Main;
 import com.ringosham.export.Exporter;
 import com.ringosham.objects.Settings;
 import javafx.application.Platform;
@@ -87,6 +88,7 @@ public class Controller {
         //Some checks to make sure stuff works
         if (!beatmapDir.isDirectory()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(Main.appTitle);
             alert.setHeaderText("Osu! folder not found");
             alert.setContentText("Cannot find osu! installation. Please select your osu! installation folder.");
             alert.showAndWait();
@@ -100,6 +102,7 @@ public class Controller {
         }
         if (!beatmapDir.canRead()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(Main.appTitle);
             alert.setHeaderText("Cannot read osu! folder");
             alert.setContentText("Please fix the permission of your osu! installation folder");
             alert.showAndWait();

@@ -1,5 +1,7 @@
 #Osu! Exporter
-A simple utility for exporting all songs from your osu! library 
+A simple utility for exporting all songs from your osu! library
+
+Do not use this program for distributing songs illegally. I, the creator of this program, am not responsible for such actions performed by the user of the program. 
 ##Features
 * Proper file renaming
 * Adding MP3 tags based on beatmap info
