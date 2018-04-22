@@ -1,13 +1,10 @@
 package com.ringosham.export;
 
 import com.ringosham.objects.Song;
-import javafx.concurrent.Task;
 
-import java.io.File;
 import java.util.*;
 
-public class Filter extends Task<List<Song>> {
-
+public class Filter {
 
     private List<Song> songList = new LinkedList<>();
     private boolean filterPractice;
@@ -21,8 +18,7 @@ public class Filter extends Task<List<Song>> {
         this.filterSeconds = filterSeconds;
     }
 
-    @Override
-    protected List<Song> call() {
+    List<Song> start() {
         //Remove exact duplicates based on hash. The easiest method would be a HashMap
         Map<String, Song> songMap = new HashMap<>();
         for (Song song : songList)

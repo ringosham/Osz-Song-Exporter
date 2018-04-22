@@ -1,18 +1,23 @@
 package com.ringosham.export;
 
 import com.ringosham.objects.Song;
-import javafx.concurrent.Task;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Copier extends Task<Integer> {
+class Copier {
+
+    private final ReadOnlyStringWrapper progressText = new ReadOnlyStringWrapper();
+    private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
 
     private int copiedCount = 0;
     private int workDone = 0;
@@ -32,8 +37,7 @@ public class Copier extends Task<Integer> {
         this.filterDuplicates = filterDuplicates;
     }
 
-    @Override
-    protected Integer call() {
+    int start() {
         for (Song song : songList) {
             String filename;
             if (renameAsBeatmap) {
@@ -54,6 +58,7 @@ public class Copier extends Task<Integer> {
             }
             else
                 filename = song.getBeatmapID();
+            progressText.set("Copying " + filename);
             if (song.getFileLocation().getName().toLowerCase().endsWith(".mp3"))
                 filename = filename + ".mp3";
             else
@@ -70,8 +75,18 @@ public class Copier extends Task<Integer> {
                 Exporter.failCount++;
                 e.printStackTrace();
             }
-            updateProgress(workDone++, songList.size());
+            workDone++;
+            double progressDouble = ((double) workDone) / songList.size();
+            progress.set(progressDouble);
         }
         return copiedCount;
+    }
+
+    ReadOnlyStringProperty progressTextProperty() {
+        return progressText;
+    }
+
+    ReadOnlyDoubleProperty progressProperty() {
+        return progress;
     }
 }

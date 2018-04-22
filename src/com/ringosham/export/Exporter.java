@@ -18,10 +18,6 @@ public class Exporter extends Task<Void> {
 
     //Status
     static int failCount = 0;
-    private int copiedCount = 0;
-
-    //Export variables
-    private List<Song> songList = new LinkedList<>();
 
     public Exporter(Controller ui, Settings settings) {
         this.ui = ui;
@@ -30,11 +26,8 @@ public class Exporter extends Task<Void> {
 
     @Override
     protected Void call() {
-        //FIXME Need workaround with Task update UI.
-        //FIXME Maybe send all threads from controller?
-        //FIXME Maybe remove task functionality from every class except this one?
         failCount = 0;
-        copiedCount = 0;
+        int copiedCount = 0;
         System.out.println("Started exporting at " + Calendar.getInstance().getTime());
         System.out.println("Export directory: " + settings.getExportDirectory().getAbsolutePath());
         ui.exportButton.setDisable(true);
@@ -42,32 +35,14 @@ public class Exporter extends Task<Void> {
         //I suspect it's the compiler's fault
         updateMessage("Analysing beatmaps...");
         Hasher hasher = new Hasher();
-        hasher.setOnSucceeded(event -> songList = hasher.getValue());
-        ui.progress.progressProperty().bind(hasher.progressProperty());
-        Thread hashThread = new Thread(hasher);
-        hashThread.setDaemon(true);
-        hashThread.start();
-        try {
-            hashThread.join(0);
-            //Wait for the onSucceeded listener
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        hasher.progressProperty().addListener(((observable, oldValue, newValue) -> updateProgress(newValue.doubleValue(), 1)));
+        //Export variables
+        List<Song> songList = hasher.start();
 
         updateMessage("Filtering beatmaps...");
         updateProgress(Long.MIN_VALUE, Long.MAX_VALUE);
         Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds());
-        filter.setOnSucceeded(event -> songList = filter.getValue());
-        Thread filterThread = new Thread(filter);
-        filterThread.setDaemon(true);
-        filterThread.start();
-        try {
-            filterThread.join(0);
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        songList = filter.start();
 
         if (settings.isConvertOgg()) {
             for (Song song : songList) {
@@ -77,58 +52,33 @@ public class Exporter extends Task<Void> {
                     else
                         updateMessage("Converting " + song.getTitle() + " - " + song.getAuthor());
                     Converter converter = new Converter(song);
-                    converter.setOnSucceeded(event -> song.setFileLocation(converter.getValue()));
-                    Thread convertThread = new Thread(converter);
-                    convertThread.setDaemon(true);
-                    convertThread.start();
-                    try {
-                        convertThread.join(0);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    song.setFileLocation(converter.start());
                 }
             }
         }
 
         //The copier handles the renaming as well
         Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite(), settings.getExportDirectory(), settings.isFilterDuplicates());
-        copier.setOnSucceeded(event -> copiedCount = copier.getValue());
-        ui.progress.progressProperty().bind(copier.progressProperty());
-        //ui.progressText.textProperty().bind(copier.messageProperty());
-        updateMessage("Copying songs...");
-        Thread copyThread = new Thread(copier);
-        copyThread.setDaemon(true);
-        copyThread.start();
-        try {
-            copyThread.join(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        copier.progressProperty().addListener(((observable, oldValue, newValue) -> updateProgress(newValue.doubleValue(), 1)));
+        copier.progressTextProperty().addListener(((observable, oldValue, newValue) -> updateMessage(newValue)));
+        copiedCount = copier.start();
 
         //Add tags after copying
         if (settings.isFixEncoding() || settings.isApplyTags()) {
             Tagger tagger = new Tagger(songList, settings.isApplyTags(), settings.isOverrideTags(), settings.isFixEncoding());
-            ui.progressText.textProperty().bind(tagger.messageProperty());
-            Thread tagThread = new Thread(tagger);
-            tagThread.setDaemon(true);
-            tagThread.start();
-            try {
-                tagThread.join(0);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            tagger.textProperty().addListener(((observable, oldValue, newValue) -> updateMessage(newValue)));
         }
-
+        System.out.println("---------------------------------");
         System.out.println("Export complete");
         System.out.println("Total exported songs: " + copiedCount);
         System.out.println("Total songs that failed to copy: " + failCount);
+        System.out.println("---------------------------------");
         Desktop desktop = Desktop.getDesktop();
         try {
             desktop.open(settings.getExportDirectory());
         } catch (IOException ignored) {
         }
-        ui.progressText.textProperty().unbind();
+        updateMessage("Ready.");
         ui.exportButton.setDisable(false);
         return null;
     }

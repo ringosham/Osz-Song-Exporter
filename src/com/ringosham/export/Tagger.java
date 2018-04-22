@@ -1,15 +1,17 @@
 package com.ringosham.export;
 
 import com.ringosham.objects.Song;
-import javafx.concurrent.Task;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 
 import java.util.List;
 
 /**
  *  Handles tags in mp3s (Adding tags and encoding problems)
  */
-public class Tagger extends Task<Void> {
+public class Tagger {
 
+    private final ReadOnlyStringWrapper progressText = new ReadOnlyStringWrapper();
 
     private List<Song> songList;
     private boolean applyTags;
@@ -23,8 +25,11 @@ public class Tagger extends Task<Void> {
         this.fixEncoding = fixEncoding;
     }
 
-    @Override
-    protected Void call() {
-        return null;
+    protected void start() {
+        return;
+    }
+
+    ReadOnlyStringProperty textProperty() {
+        return progressText;
     }
 }

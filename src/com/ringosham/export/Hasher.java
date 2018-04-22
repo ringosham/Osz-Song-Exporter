@@ -2,7 +2,8 @@ package com.ringosham.export;
 
 import com.ringosham.controllers.Controller;
 import com.ringosham.objects.Song;
-import javafx.concurrent.Task;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import org.gagravarr.vorbis.VorbisFile;
@@ -16,10 +17,15 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Hasher extends Task<List<Song>> {
+class Hasher {
 
-    @Override
-    protected List<Song> call() {
+    private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
+
+    ReadOnlyDoubleProperty progressProperty() {
+        return progress;
+    }
+
+    List<Song> start() {
         long workDone = 0;
         List<Song> song = new LinkedList<>();
         long progressMax = Controller.beatmapDir.listFiles(File::isDirectory).length;
@@ -110,7 +116,8 @@ public class Hasher extends Task<List<Song>> {
                 break;
             }
             workDone++;
-            updateProgress(workDone, progressMax);
+            double progressDouble = ((double) workDone) / progressMax;
+            progress.set(progressDouble);
         }
         return song;
     }
