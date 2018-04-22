@@ -30,6 +30,9 @@ public class Exporter extends Task<Void> {
 
     @Override
     protected Void call() {
+        //FIXME Need workaround with Task update UI.
+        //FIXME Maybe send all threads from controller?
+        //FIXME Maybe remove task functionality from every class except this one?
         failCount = 0;
         copiedCount = 0;
         System.out.println("Started exporting at " + Calendar.getInstance().getTime());
@@ -88,10 +91,11 @@ public class Exporter extends Task<Void> {
         }
 
         //The copier handles the renaming as well
-        Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite());
+        Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite(), settings.getExportDirectory(), settings.isFilterDuplicates());
         copier.setOnSucceeded(event -> copiedCount = copier.getValue());
         ui.progress.progressProperty().bind(copier.progressProperty());
-        ui.progressText.textProperty().bind(copier.messageProperty());
+        //ui.progressText.textProperty().bind(copier.messageProperty());
+        updateMessage("Copying songs...");
         Thread copyThread = new Thread(copier);
         copyThread.setDaemon(true);
         copyThread.start();
@@ -124,6 +128,7 @@ public class Exporter extends Task<Void> {
             desktop.open(settings.getExportDirectory());
         } catch (IOException ignored) {
         }
+        ui.progressText.textProperty().unbind();
         ui.exportButton.setDisable(false);
         return null;
     }

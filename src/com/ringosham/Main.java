@@ -13,7 +13,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //TODO Basic copying
         //TODO Renaming options (Keep original file name (not recommended. Automatically add suffix to the name), or rename it after beatmap name)
         //TODO Remove practise maps (Allow in settings. Just add suffix to the file name)
         //TODO Ogg conversion

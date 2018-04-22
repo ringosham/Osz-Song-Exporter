@@ -8,24 +8,24 @@ public class Song {
     private String title;
     private String author;
     private long duration;
-    private File outputLocation;
     private String unicodeTitle;
     private String unicodeAuthor;
     private boolean isOgg;
     private boolean isFullVersion;
     private File albumArt;
+    private String beatmapID;
 
-    public Song(String hash, File fileLocation, String title, String author, long duration, File outputLocation, String unicodeTitle, String unicodeAuthor, File albumArt, boolean isOgg) {
+    public Song(String hash, File fileLocation, String title, String author, long duration, String unicodeTitle, String unicodeAuthor, File albumArt, boolean isOgg) {
         this.hash = hash;
         this.fileLocation = fileLocation;
         this.title = title;
         this.author = author;
         this.duration = duration;
-        this.outputLocation = outputLocation;
         this.unicodeTitle = unicodeTitle;
         this.unicodeAuthor = unicodeAuthor;
         this.albumArt = albumArt;
         this.isOgg = isOgg;
+        beatmapID = fileLocation.getParentFile().getName();
     }
 
     public File getFileLocation() {
@@ -50,10 +50,6 @@ public class Song {
         return fileLocation.getName();
     }
 
-    public File getOutputLocation() {
-        return outputLocation;
-    }
-
     public String getUnicodeTitle() {
         return unicodeTitle;
     }
@@ -70,10 +66,6 @@ public class Song {
         return hash;
     }
 
-    public void setOutputLocation(File outputLocation) {
-        this.outputLocation = outputLocation;
-    }
-
     public void setFileLocation(File fileLocation) {
         this.fileLocation = fileLocation;
     }
@@ -88,5 +80,9 @@ public class Song {
 
     public File getAlbumArt() {
         return albumArt;
+    }
+
+    public String getBeatmapID() {
+        return beatmapID;
     }
 }

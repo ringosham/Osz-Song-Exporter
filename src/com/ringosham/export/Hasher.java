@@ -96,12 +96,12 @@ public class Hasher extends Task<List<Song>> {
                             duration = (long) mediaFile.getDuration().toSeconds();
                         else
                             break;
-                        song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, albumArt, false));
+                        song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, false));
                     } else {
                         VorbisFile vorbisFile = new VorbisFile(fileLocation);
                         //Nominal bitrate is not accurate enough. About 10 seconds in error
                         duration = (fileLocation.length() * 8) / vorbisFile.getInfo().getBitrateNominal();
-                        song.add(new Song(hash, fileLocation, title, author, duration, null, unicodeTitle, unicodeAuthor, albumArt, true));
+                        song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, true));
                     }
                 } catch (Exception e) {
                     System.out.println("Failed reading beatmap: " + beatmap.getName());
