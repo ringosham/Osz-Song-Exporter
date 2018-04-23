@@ -8,7 +8,6 @@ import javafx.concurrent.Task;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Exporter extends Task<Void> {

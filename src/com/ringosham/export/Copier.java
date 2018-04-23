@@ -43,6 +43,8 @@ class Copier {
             if (renameAsBeatmap) {
                 if (song.getUnicodeTitle() != null && song.getUnicodeAuthor() != null)
                     filename = song.getUnicodeTitle() + " - " + song.getUnicodeAuthor();
+                else if (song.getUnicodeTitle().isEmpty() && song.getUnicodeAuthor().isEmpty())
+                    filename = song.getTitle() + " - " + song.getAuthor();
                 else
                     filename = song.getTitle() + " - " + song.getAuthor();
                 if (song.isFullVersion())

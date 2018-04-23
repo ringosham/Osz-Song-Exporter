@@ -4,8 +4,6 @@ import com.ringosham.Main;
 import com.ringosham.export.Exporter;
 import com.ringosham.objects.Settings;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -68,7 +66,7 @@ public class Controller {
         String practiseTooltip = "Skips through any maps that are labelled as \"Stream practice\" and \"Jump practice\"";
         String filterTooltip = "The program will try to differentiate full length songs and TV size songs through the length of the song. " +
                 "Highly recommended if you have a lot of beatmaps.";
-        String overwriteTooltip = "Overwrite the file even if it already exists. It will also overwrite if the file sizes are different";
+        String overwriteTooltip = "Overwrite the file even if it already exists. Otherwise it will overwrite if the file sizes are different";
         convertCheckbox.setTooltip(new Tooltip(convertTooltip));
         fixEncoding.setTooltip(new Tooltip(encodingTooltip));
         overrideTags.setTooltip(new Tooltip(overrideTooltip));
