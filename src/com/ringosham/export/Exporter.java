@@ -32,6 +32,7 @@ public class Exporter extends Task<Void> {
         System.out.println("Export directory: " + settings.getExportDirectory().getAbsolutePath());
         ui.exportButton.setDisable(true);
         //There seems to be a Java bug with updateMessage. Sometimes crashes elements that are binded.
+        //This makes no sense as it worked upon recompiling multiple times
         //I suspect it's the compiler's fault
         updateMessage("Analysing beatmaps...");
         Hasher hasher = new Hasher();
@@ -40,7 +41,7 @@ public class Exporter extends Task<Void> {
         List<Song> songList = hasher.start();
 
         updateMessage("Filtering beatmaps...");
-        updateProgress(Long.MIN_VALUE, Long.MAX_VALUE);
+        updateProgress(-1, 1);
         Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds());
         songList = filter.start();
 

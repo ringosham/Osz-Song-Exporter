@@ -55,6 +55,7 @@ class Copier {
                     }
                     dupCount.put(song.getTitle(), 0);
                 }
+                filename = getValidFileName(filename);
             }
             else
                 filename = song.getBeatmapID();
@@ -80,6 +81,13 @@ class Copier {
             progress.set(progressDouble);
         }
         return copiedCount;
+    }
+
+    //Remove any illegal characters in the file name
+    private String getValidFileName(String name) {
+        return name.replaceAll("\\*", "").replaceAll("<", "").replaceAll(">", "")
+                .replaceAll("\\|", "").replaceAll("\\?", "").replaceAll(":", "")
+                .replaceAll("\"", "").replaceAll("\\\\",",").replaceAll("/", ",");
     }
 
     ReadOnlyStringProperty progressTextProperty() {
