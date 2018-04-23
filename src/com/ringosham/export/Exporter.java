@@ -6,6 +6,7 @@ import com.ringosham.objects.Song;
 import javafx.concurrent.Task;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
@@ -43,8 +44,12 @@ public class Exporter extends Task<Void> {
         updateProgress(-1, 1);
         Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds());
         songList = filter.start();
+        System.out.println("---------------------------------");
+        System.out.println("Filtered songs down to " + songList.size() + " songs");
+        System.out.println("---------------------------------");
 
         if (settings.isConvertOgg()) {
+            deleteTempDirectory();
             for (Song song : songList) {
                 if (song.isOgg()) {
                     if (song.getUnicodeTitle() != null && song.getUnicodeAuthor() != null)
@@ -73,6 +78,8 @@ public class Exporter extends Task<Void> {
         System.out.println("Total exported songs: " + copiedCount);
         System.out.println("Total songs that failed to copy: " + failCount);
         System.out.println("---------------------------------");
+        updateMessage("Cleaning up...");
+        deleteTempDirectory();
         Desktop desktop = Desktop.getDesktop();
         try {
             desktop.open(settings.getExportDirectory());
@@ -81,5 +88,14 @@ public class Exporter extends Task<Void> {
         updateMessage("Ready.");
         ui.exportButton.setDisable(false);
         return null;
+    }
+
+    private void deleteTempDirectory() {
+        if (Converter.convertDir.exists())
+            for (File file : Converter.convertDir.listFiles())
+                if (!file.delete())
+                    file.deleteOnExit();
+        if (!Converter.convertDir.delete())
+            Converter.convertDir.deleteOnExit();
     }
 }

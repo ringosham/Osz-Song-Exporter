@@ -29,7 +29,9 @@ public class Filter {
 
         //Filter practice maps - Any beatmaps that are title stream practice and jump practice
         if (filterPractice) {
-            for (Song song : songList)
+            Iterator<Song> iterator = songList.iterator();
+            Song song;
+            while ((song = iterator.next()) != null)
                 if (song.getTitle().toLowerCase().contains("stream practice") || song.getTitle().toLowerCase().contains("stream practise") ||
                         song.getUnicodeTitle().toLowerCase().contains("stream practice") || song.getUnicodeTitle().toLowerCase().contains("stream practise") ||
                         song.getTitle().toLowerCase().contains("jump practice") || song.getTitle().toLowerCase().contains("jump practise") ||

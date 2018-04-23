@@ -1,19 +1,60 @@
 package com.ringosham.export;
 
 import com.ringosham.objects.Song;
+import it.sauronsoftware.jave.AudioAttributes;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.EncodingAttributes;
+import org.gagravarr.vorbis.VorbisFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
-public class Converter {
+class Converter {
 
-    private final File convertDir = new File(System.getProperty("java.io.tmpdir") + "/convert");
+    static final File convertDir = new File(System.getProperty("java.io.tmpdir") + "/convertOgg");
     private Song song;
 
     Converter(Song song) {
         this.song = song;
     }
 
-    public File start() {
-        return null;
+    File start() {
+        if (!convertDir.exists())
+            convertDir.mkdir();
+        int bitrate = 0;
+        int samplingRate = 0;
+        int channels = 0;
+        try {
+            VorbisFile ogg = new VorbisFile(song.getFileLocation());
+            bitrate = ogg.getInfo().getBitrateNominal();
+            samplingRate = ogg.getInfo().getSampleRate();
+            channels = ogg.getInfo().getChannels();
+        } catch (IOException e) {
+            System.out.println("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
+            e.printStackTrace();
+            return song.getFileLocation();
+        }
+        File output = new File(convertDir.getAbsolutePath() + "/" + UUID.randomUUID().toString() + ".mp3");
+        Encoder encoder = new Encoder();
+        AudioAttributes audioInfo = new AudioAttributes();
+        audioInfo.setBitRate(bitrate);
+        audioInfo.setChannels(channels);
+        audioInfo.setSamplingRate(samplingRate);
+        audioInfo.setCodec(AudioAttributes.DIRECT_STREAM_COPY);
+        //Default value - No volume change
+        audioInfo.setVolume(256);
+        EncodingAttributes attributes = new EncodingAttributes();
+        attributes.setAudioAttributes(audioInfo);
+        attributes.setFormat("mp3");
+        try {
+            encoder.encode(song.getFileLocation(), output, attributes);
+        } catch (EncoderException e) {
+            System.out.println("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
+            e.printStackTrace();
+            return song.getFileLocation();
+        }
+        return output;
     }
 }
