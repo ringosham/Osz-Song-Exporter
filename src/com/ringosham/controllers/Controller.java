@@ -110,7 +110,9 @@ public class Controller {
         }
         progressText.setText("Ready. " + beatmapDir.listFiles(File::isDirectory).length + " songs found. (Estimate)");
         overrideTags.setDisable(true);
-        filterSeconds.setDisable(true);
+        filterPractice.setSelected(true);
+        filterDuplicates.setSelected(true);
+        filterSeconds.setText("10");
         filterSeconds.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 2 || !newValue.matches("\\d*") || newValue.equals("0"))
                 filterSeconds.setText(oldValue);
