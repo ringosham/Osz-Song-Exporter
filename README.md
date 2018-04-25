@@ -5,6 +5,8 @@ I find it funny that most of these utility software I found in Github either don
 ##Disclaimer
 This program simply copy, as well as converting songs already stored the user's computer. The copied and converted files are stored in the user's device only. These songs are intended for personal use only. The user, however, are allow to do anything with the files under the confines of copyright law. The user is the only one liable for any copyright infringing actions.
 
+This program is also not affiliated to the rhythm game "osu!".
+
 In short,
 
 Do not use this program for distributing songs illegally. The creator of this program will not be responsible for such actions performed by the user of the program. 
