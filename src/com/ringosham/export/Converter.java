@@ -23,14 +23,15 @@ class Converter {
     File start() {
         if (!convertDir.exists())
             convertDir.mkdir();
-        int bitrate = 0;
-        int samplingRate = 0;
-        int channels = 0;
+        int bitrate;
+        int samplingRate;
+        int channels;
         try {
             VorbisFile ogg = new VorbisFile(song.getFileLocation());
             bitrate = ogg.getInfo().getBitrateNominal();
             samplingRate = ogg.getInfo().getSampleRate();
             channels = ogg.getInfo().getChannels();
+            ogg.close();
         } catch (IOException e) {
             System.out.println("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
             e.printStackTrace();
@@ -43,8 +44,6 @@ class Converter {
         audioInfo.setChannels(channels);
         audioInfo.setSamplingRate(samplingRate);
         audioInfo.setCodec(AudioAttributes.DIRECT_STREAM_COPY);
-        //Default value - No volume change
-        audioInfo.setVolume(256);
         EncodingAttributes attributes = new EncodingAttributes();
         attributes.setAudioAttributes(audioInfo);
         attributes.setFormat("mp3");

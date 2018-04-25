@@ -107,6 +107,7 @@ class Hasher {
                         VorbisFile vorbisFile = new VorbisFile(fileLocation);
                         //Nominal bitrate is not accurate enough. About 10 seconds in error
                         duration = (fileLocation.length() * 8) / vorbisFile.getInfo().getBitrateNominal();
+                        vorbisFile.close();
                         song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, true));
                     }
                 } catch (Exception e) {
