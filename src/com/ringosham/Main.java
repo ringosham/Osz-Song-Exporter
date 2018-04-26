@@ -16,6 +16,7 @@ public class Main extends Application {
         //TODO Ogg conversion
         //TODO Mp3Tag encoding conversion (Detect non UTF-8 mp3 tags and converts them)
         //TODO Option to add mp3 tags (Options to overwrite or not)
+        //TODO Export as osz (Of course this disables all options)
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(appTitle);
         alert.setHeaderText("Disclaimer");
