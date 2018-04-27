@@ -22,7 +22,11 @@ Do not use this program for distributing songs illegally. The creator of this pr
 The above features are fully configurable!
 ##Compiling
 Just compile it with Intellij. That's it.
+
+The Java compiler is a little bit buggy. UI elements may not work on first time compile. In this case, just recompile until it works.
 ##Things to note
+This program is only tested in Windows, but it should work on all operating systems.
+
 The FFmpeg binary is only 32-bit in Linux and macOS. Please make sure you have the dependencies for conversion.
 ##License
 ```
@@ -45,4 +49,4 @@ Copyright © 2018 Ringosham
 
 [VorbisJava](https://github.com/Gagravarr/VorbisJava) - Ogg and vorbis tools for Java - Under Apache license 2.0
 
-[FFmpeg project](https://ffmpeg.org) - FFmprg project - Cross platform record, stream, convert video and audio utility - [FFmpeg license](https://ffmpeg.org/legal.html)
+[FFmpeg project](https://ffmpeg.org) - FFmpeg project - Cross platform record, stream, convert video and audio utility - [FFmpeg license](https://ffmpeg.org/legal.html)
