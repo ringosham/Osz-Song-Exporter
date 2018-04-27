@@ -27,7 +27,7 @@ public class Filter {
         for (String key : songMap.keySet())
             songList.add(songMap.get(key));
 
-        //Filter practice maps - Any beatmaps that are title stream practice and jump practice
+        //Filter practice maps - Any beatmaps that are titled stream practice and jump practice
         if (filterPractice) {
             Iterator<Song> iterator = songList.iterator();
             Song song;
