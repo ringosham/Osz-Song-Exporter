@@ -42,9 +42,10 @@ class Copier {
             String filename;
             if (renameAsBeatmap) {
                 if (song.getUnicodeTitle() != null && song.getUnicodeAuthor() != null)
-                    filename = song.getUnicodeTitle() + " - " + song.getUnicodeAuthor();
-                else if (song.getUnicodeTitle().isEmpty() && song.getUnicodeAuthor().isEmpty())
-                    filename = song.getTitle() + " - " + song.getAuthor();
+                    if (song.getUnicodeTitle().isEmpty() && song.getUnicodeAuthor().isEmpty())
+                        filename = song.getTitle() + " - " + song.getAuthor();
+                    else
+                        filename = song.getUnicodeTitle() + " - " + song.getUnicodeAuthor();
                 else
                     filename = song.getTitle() + " - " + song.getAuthor();
                 if (song.isFullVersion())
@@ -66,7 +67,7 @@ class Copier {
                 filename = filename + ".mp3";
             else
                 filename = filename + ".ogg";
-            File outputFile = new File(exportDirectory.getAbsolutePath() + "/" + filename);
+            File outputFile = new File(exportDirectory.getAbsolutePath(), filename);
             try {
                 if (overwrite)
                     Files.copy(song.getFileLocation().toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);

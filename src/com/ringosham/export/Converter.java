@@ -37,7 +37,7 @@ class Converter {
             e.printStackTrace();
             return song.getFileLocation();
         }
-        File output = new File(convertDir.getAbsolutePath() + "/" + UUID.randomUUID().toString() + ".mp3");
+        File output = new File(convertDir.getAbsolutePath(), UUID.randomUUID().toString() + ".mp3");
         Encoder encoder = new Encoder();
         AudioAttributes audioInfo = new AudioAttributes();
         audioInfo.setBitRate(bitrate);

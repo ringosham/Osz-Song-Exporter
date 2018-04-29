@@ -32,8 +32,8 @@ public class Exporter extends Task<Void> {
         System.out.println("Export directory: " + settings.getExportDirectory().getAbsolutePath());
         ui.exportButton.setDisable(true);
         //There seems to be a Java bug with updateMessage. Sometimes crashes elements that are binded.
-        //This makes no sense as it worked upon recompiling multiple times
-        //I suspect it's the compiler's fault
+        //Rebuild the entire project every time you change the code. Otherwise the UI will not work.
+        //It's definitely the compiler's fault
         updateMessage("Analysing beatmaps...");
         Hasher hasher = new Hasher();
         hasher.progressProperty().addListener(((observable, oldValue, newValue) -> updateProgress(newValue.doubleValue(), 1)));
@@ -42,6 +42,8 @@ public class Exporter extends Task<Void> {
 
         updateMessage("Filtering beatmaps...");
         updateProgress(-1, 1);
+        //FIXME Try to get the UI working again? Is this even possible?
+        //Seriously, Java just spits out NullPointerExceptions even though the code is 100% correct.
         Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds());
         songList = filter.start();
         System.out.println("---------------------------------");

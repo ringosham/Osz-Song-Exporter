@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Filter {
 
-    private List<Song> songList = new LinkedList<>();
+    private List<Song> songList = new ArrayList<>();
     private boolean filterPractice;
     private boolean filterDuplicates;
     private int filterSeconds;
@@ -24,19 +24,25 @@ public class Filter {
         for (Song song : songList)
             songMap.putIfAbsent(song.getHash(), song);
         songList.clear();
-        for (String key : songMap.keySet())
-            songList.add(songMap.get(key));
+        songList.addAll(songMap.values());
 
         //Filter practice maps - Any beatmaps that are titled stream practice and jump practice
         if (filterPractice) {
-            Iterator<Song> iterator = songList.iterator();
-            Song song;
-            while ((song = iterator.next()) != null)
-                if (song.getTitle().toLowerCase().contains("stream practice") || song.getTitle().toLowerCase().contains("stream practise") ||
-                        song.getUnicodeTitle().toLowerCase().contains("stream practice") || song.getUnicodeTitle().toLowerCase().contains("stream practise") ||
-                        song.getTitle().toLowerCase().contains("jump practice") || song.getTitle().toLowerCase().contains("jump practise") ||
-                        song.getUnicodeTitle().toLowerCase().contains("jump practice") || song.getUnicodeTitle().toLowerCase().contains("jump practise"))
-                    songList.remove(song);
+            songList.removeIf(song ->  {
+                String title = song.getTitle().trim().toLowerCase();
+                String unicodeTitle = null;
+                if (song.getUnicodeTitle() != null)
+                    unicodeTitle = song.getUnicodeTitle().trim().toLowerCase();
+                String[] filters = {"stream practice", "stream practise", "jump practice", "jump practise"};
+                for (String filter : filters) {
+                    if (title.contains(filter))
+                        return true;
+                    if (unicodeTitle != null)
+                        if (unicodeTitle.contains(filter) && !unicodeTitle.isEmpty())
+                            return true;
+                }
+                return false;
+            });
         }
 
         //Filter duplicates based on the length of the file
