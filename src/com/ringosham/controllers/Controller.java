@@ -154,10 +154,7 @@ public class Controller {
                     filterDuplicates.isSelected(), seconds, exportDirectory);
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);
-            progressText.textProperty().bind(exporter.messageProperty());
-            progress.progressProperty().bind(exporter.progressProperty());
-            Thread thread = new Thread(exporter);
-            thread.start();
+            exporter.execute();
         }
     }
 }

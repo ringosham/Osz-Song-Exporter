@@ -3,7 +3,7 @@ package com.ringosham.export;
 import com.ringosham.controllers.Controller;
 import com.ringosham.objects.Settings;
 import com.ringosham.objects.Song;
-import javafx.concurrent.Task;
+import com.victorlaerte.asynctask.AsyncTask;
 
 import java.awt.*;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
-public class Exporter extends Task<Void> {
+public class Exporter extends AsyncTask<Void, Object, Void> {
     //Constructor
     private Controller ui;
     private Settings settings;
@@ -24,26 +24,51 @@ public class Exporter extends Task<Void> {
         this.settings = settings;
     }
 
+    private void deleteTempDirectory() {
+        if (Converter.convertDir.exists())
+            for (File file : Converter.convertDir.listFiles())
+                if (!file.delete())
+                    file.deleteOnExit();
+        if (!Converter.convertDir.delete())
+            Converter.convertDir.deleteOnExit();
+    }
+
     @Override
-    protected Void call() {
+    public void onPreExecute() {
+        ui.exportButton.setDisable(true);
+    }
+
+    @Override
+    public void progressCallback(Object... params) {
+        String action = (String) params[0];
+        switch (action) {
+            case "text":
+                String text = (String) params[1];
+                ui.progressText.setText(text);
+                break;
+            case "progress":
+                double workDone = (double) params[1];
+                double max = (double) params[2];
+                ui.progress.setProgress(workDone / max);
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public Void doInBackground(Void... params) {
         failCount = 0;
-        int copiedCount = 0;
+        int copiedCount;
         System.out.println("Started exporting at " + Calendar.getInstance().getTime());
         System.out.println("Export directory: " + settings.getExportDirectory().getAbsolutePath());
-        ui.exportButton.setDisable(true);
-        //There seems to be a Java bug with updateMessage. Sometimes crashes elements that are binded.
-        //Rebuild the entire project every time you change the code. Otherwise the UI will not work.
-        //It's definitely the compiler's fault
-        updateMessage("Analysing beatmaps...");
+        publishProgress("text", "Analysing beatmaps...");
         Hasher hasher = new Hasher();
-        hasher.progressProperty().addListener(((observable, oldValue, newValue) -> updateProgress(newValue.doubleValue(), 1)));
+        hasher.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
         //Export variables
         List<Song> songList = hasher.start();
 
-        updateMessage("Filtering beatmaps...");
-        updateProgress(-1, 1);
-        //FIXME Try to get the UI working again? Is this even possible?
-        //Seriously, Java just spits out NullPointerExceptions even though the code is 100% correct.
+        publishProgress("text", "Filtering beatmaps...");
+        publishProgress("progress", -1, 1);
         Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds());
         songList = filter.start();
         System.out.println("---------------------------------");
@@ -55,9 +80,9 @@ public class Exporter extends Task<Void> {
             for (Song song : songList) {
                 if (song.isOgg()) {
                     if (song.getUnicodeTitle() != null && song.getUnicodeAuthor() != null)
-                        updateMessage("Converting " + song.getUnicodeTitle() + " - " + song.getUnicodeAuthor());
+                        publishProgress("text", "Converting " + song.getUnicodeTitle() + " - " + song.getUnicodeAuthor());
                     else
-                        updateMessage("Converting " + song.getTitle() + " - " + song.getAuthor());
+                        publishProgress("text", "Converting " + song.getTitle() + " - " + song.getAuthor());
                     Converter converter = new Converter(song);
                     song.setFileLocation(converter.start());
                 }
@@ -66,38 +91,33 @@ public class Exporter extends Task<Void> {
 
         //The copier handles the renaming as well
         Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite(), settings.getExportDirectory(), settings.isFilterDuplicates());
-        copier.progressProperty().addListener(((observable, oldValue, newValue) -> updateProgress(newValue.doubleValue(), 1)));
-        copier.progressTextProperty().addListener(((observable, oldValue, newValue) -> updateMessage(newValue)));
+        copier.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
+        copier.progressTextProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
         copiedCount = copier.start();
 
         //Add tags after copying
         if (settings.isFixEncoding() || settings.isApplyTags()) {
             Tagger tagger = new Tagger(songList, settings.isApplyTags(), settings.isOverrideTags(), settings.isFixEncoding());
-            tagger.textProperty().addListener(((observable, oldValue, newValue) -> updateMessage(newValue)));
+            tagger.textProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
         }
         System.out.println("---------------------------------");
         System.out.println("Export complete");
         System.out.println("Total exported songs: " + copiedCount);
         System.out.println("Total songs that failed to copy: " + failCount);
         System.out.println("---------------------------------");
-        updateMessage("Cleaning up...");
+        publishProgress("text", "Cleaning up...");
         deleteTempDirectory();
         Desktop desktop = Desktop.getDesktop();
         try {
             desktop.open(settings.getExportDirectory());
         } catch (IOException ignored) {
         }
-        updateMessage("Ready.");
-        ui.exportButton.setDisable(false);
+        publishProgress("text", "Ready.");
         return null;
     }
 
-    private void deleteTempDirectory() {
-        if (Converter.convertDir.exists())
-            for (File file : Converter.convertDir.listFiles())
-                if (!file.delete())
-                    file.deleteOnExit();
-        if (!Converter.convertDir.delete())
-            Converter.convertDir.deleteOnExit();
+    @Override
+    public void onPostExecute(Void params) {
+        ui.exportButton.setDisable(false);
     }
 }
