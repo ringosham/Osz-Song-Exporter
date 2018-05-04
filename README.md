@@ -1,11 +1,11 @@
 #Osu! Exporter
-A simple utility for exporting all songs and beatmaps (in .osz form) from your osu! library.
+A simple utility for exporting all songs and beatmaps (in .osz form) with a single click from your osu! library.
 
 I find it funny that most of these utility software I found in Github either don't work or lacking in features. So I decided to make one myself!
 ##Disclaimer
-This program only copies, as well as converting songs that are already stored the user's computer. The copied and converted files are stored in the user's device only. These songs are intended for personal use only. The user, however, is allowed to do anything with the files under the confines of copyright laws. The author of this program cannot prevent the user from any copyright infringing actions. Therefore, In no event shall the author be liable for any copyright infringement claims. The user is the only one liable for such actions.
+This program only copies, as well as converting songs that are already stored the user's computer. The copied and converted files are stored in the user's device only. These songs are intended for personal use only. The user, however, is allowed to do anything with the files under the confines of copyright laws. The author of this program cannot prevent the user from performing any copyright infringing actions. Therefore, in no event shall the author be liable for any copyright infringement claims. The user is the only one liable for such actions.
 
-This program is also not affiliated with the rhythm game "Osu!".
+This program, although requires the rhythm game "Osu!" to function, it is not affiliated with the person/company developed the game.
 
 In short,
 
@@ -25,7 +25,7 @@ Just compile it with Intellij. That's it.
 
 The Java compiler is a little bit buggy. UI elements may not work on first time compile. In this case, just recompile until it works.
 ##Things to note
-This program is only tested in Windows, but it should work on all operating systems.
+This program is only tested in Windows 64-bit, but it should work on all operating systems.
 
 The FFmpeg binary is only 32-bit in Linux and macOS. Please make sure you have the dependencies for conversion.
 ##License
