@@ -51,4 +51,4 @@ Copyright © 2018 Ringosham
 
 [FFmpeg project](https://ffmpeg.org) - FFmpeg project - Cross platform record, stream, convert video and audio utility - [FFmpeg license](https://ffmpeg.org/legal.html)
 
-[JavaFX AsyncTask](https://github.com/victorlaerte/javafx-asynctask) - AsyncTask in JavaFX
+[JavaFX AsyncTask](https://github.com/victorlaerte/javafx-asynctask) - AsyncTask in JavaFX - [Used with permission](https://github.com/victorlaerte/javafx-asynctask/issues/4)
