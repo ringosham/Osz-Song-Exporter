@@ -47,8 +47,8 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
                 ui.progressText.setText(text);
                 break;
             case "progress":
-                double workDone = (double) params[1];
-                double max = (double) params[2];
+                double workDone = ((Number) params[1]).doubleValue();
+                double max = ((Number) params[2]).doubleValue();
                 ui.progress.setProgress(workDone / max);
                 break;
             default:
