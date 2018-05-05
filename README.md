@@ -25,6 +25,8 @@ Just compile it with Intellij. That's it.
 
 The Java compiler is a little bit buggy. UI elements may not work on first time compile. In this case, just recompile until it works.
 ##Things to note
+Depending on how many beatmaps you have, the process may take from less than 30 seconds to more than 5 minutes.
+
 This program is only tested in Windows 64-bit, but it should work on all operating systems.
 
 The FFmpeg binary is only 32-bit in Linux and macOS. Please make sure you have the dependencies for conversion.
