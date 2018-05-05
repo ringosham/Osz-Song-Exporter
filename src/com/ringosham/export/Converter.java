@@ -5,6 +5,8 @@ import it.sauronsoftware.jave.AudioAttributes;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import org.gagravarr.vorbis.VorbisFile;
 
 import java.io.File;
@@ -15,6 +17,11 @@ class Converter {
 
     static final File convertDir = new File(System.getProperty("java.io.tmpdir") + "/convertOgg");
     private Song song;
+    private ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
+    
+    ReadOnlyStringProperty consoleProperty() {
+        return console;
+    }
 
     Converter(Song song) {
         this.song = song;
@@ -29,7 +36,7 @@ class Converter {
             bitrate = ogg.getInfo().getBitrateLower();
             ogg.close();
         } catch (IOException e) {
-            System.out.println("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
+            console.set("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
             e.printStackTrace();
             return song.getFileLocation();
         }
@@ -43,7 +50,7 @@ class Converter {
         try {
             encoder.encode(song.getFileLocation(), output, attributes);
         } catch (EncoderException e) {
-            System.out.println("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
+            console.set("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
             e.printStackTrace();
             return song.getFileLocation();
         }

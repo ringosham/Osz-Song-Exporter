@@ -73,6 +73,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         publishProgress("text", "Analysing beatmaps...");
         Hasher hasher = new Hasher();
         hasher.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
+        hasher.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));
         //Export variables
         List<Song> songList = hasher.start();
 
@@ -84,7 +85,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         builder.append("Filtered songs down to ");
         builder.append(songList.size());
         builder.append(" songs");
-        publishProgress("console", builder);
+        publishProgress("console", builder.toString());
 
         if (settings.isConvertOgg()) {
             deleteTempDirectory();
@@ -95,6 +96,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
                     else
                         publishProgress("text", "Converting " + song.getTitle() + " - " + song.getAuthor());
                     Converter converter = new Converter(song);
+                    converter.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));
                     song.setFileLocation(converter.start());
                 }
             }
@@ -104,23 +106,25 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite(), settings.getExportDirectory(), settings.isFilterDuplicates());
         copier.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
         copier.progressTextProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
+        copier.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));
         copiedCount = copier.start();
 
         //Add tags after copying
         if (settings.isFixEncoding() || settings.isApplyTags()) {
-            publishProgress("progress", -1, 1);
             Tagger tagger = new Tagger(songList, settings.isApplyTags(), settings.isOverrideTags(), settings.isFixEncoding());
+            tagger.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
             tagger.textProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
+            tagger.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));
             tagger.start();
         }
         builder = new StringBuilder();
         builder.append("Total exported songs: ");
         builder.append(copiedCount);
-        publishProgress("console", builder);
+        publishProgress("console", builder.toString());
         builder = new StringBuilder();
         builder.append("Total songs that failed to copy: ");
         builder.append(failCount);
-        publishProgress("console", builder);
+        publishProgress("console", builder.toString());
         publishProgress("text", "Cleaning up...");
         deleteTempDirectory();
         Desktop desktop = Desktop.getDesktop();

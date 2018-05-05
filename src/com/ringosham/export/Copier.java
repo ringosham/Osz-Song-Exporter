@@ -18,6 +18,7 @@ class Copier {
 
     private final ReadOnlyStringWrapper progressText = new ReadOnlyStringWrapper();
     private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
+    private ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
 
     private int copiedCount = 0;
     private int workDone = 0;
@@ -28,7 +29,10 @@ class Copier {
     private boolean overwrite;
     private File exportDirectory;
     private boolean filterDuplicates;
-
+    
+    ReadOnlyStringProperty consoleProperty() {
+        return console;
+    }
     Copier(List<Song> songList, boolean renameAsBeatmap, boolean overwrite, File exportDirectory, boolean filterDuplicates) {
         this.songList = songList;
         this.renameAsBeatmap = renameAsBeatmap;
@@ -76,7 +80,7 @@ class Copier {
                 copiedCount++;
                 song.setOutputFile(outputFile);
             } catch (IOException e) {
-                System.out.println("Failed copying " + song.getTitle() + " - " + song.getAuthor());
+                console.set("Failed copying " + song.getTitle() + " - " + song.getAuthor());
                 Exporter.failCount++;
                 e.printStackTrace();
             }

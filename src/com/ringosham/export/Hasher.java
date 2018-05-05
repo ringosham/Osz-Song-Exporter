@@ -4,6 +4,8 @@ import com.ringosham.controllers.Controller;
 import com.ringosham.objects.Song;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import org.gagravarr.vorbis.VorbisFile;
@@ -20,9 +22,13 @@ import java.util.regex.Pattern;
 class Hasher {
 
     private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
+    private final ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
 
     ReadOnlyDoubleProperty progressProperty() {
         return progress;
+    }
+    ReadOnlyStringProperty consoleProperty() {
+        return console;
     }
 
     List<Song> start() {
@@ -93,7 +99,7 @@ class Hasher {
                         String finalAuthor = author;
                         player.setOnError(() -> {
                             Exporter.failCount++;
-                            System.out.println("Failed reading MP3: " + finalTitle + " - " + finalAuthor);
+                            console.set("Failed reading MP3: " + finalTitle + " - " + finalAuthor);
                             player.getError().printStackTrace();
                             player.dispose();
                         });
@@ -112,7 +118,7 @@ class Hasher {
                         song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, true));
                     }
                 } catch (Exception e) {
-                    System.out.println("Failed reading beatmap: " + beatmap.getName());
+                    console.set("Failed reading beatmap: " + beatmap.getName());
                     e.printStackTrace();
                 }
                 break;

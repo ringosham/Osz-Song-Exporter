@@ -2,6 +2,8 @@ package com.ringosham.export;
 
 import com.mpatric.mp3agic.*;
 import com.ringosham.objects.Song;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.apache.tika.parser.txt.CharsetDetector;
@@ -20,11 +22,17 @@ import java.util.UUID;
 class Tagger {
 
     private final ReadOnlyStringWrapper progressText = new ReadOnlyStringWrapper();
+    private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
 
     private List<Song> songList;
     private boolean applyTags;
     private boolean overrideTags;
     private boolean fixEncoding;
+    private ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
+
+    ReadOnlyStringProperty consoleProperty() {
+        return console;
+    }
 
     Tagger(List<Song> songList, boolean applyTags, boolean overrideTags, boolean fixEncoding) {
         this.songList = songList;
@@ -34,6 +42,7 @@ class Tagger {
     }
 
     void start() {
+        int workDone = 0;
         for (Song song : songList) {
             if (song.getOutputFile().getName().endsWith(".ogg"))
                 continue;
@@ -95,8 +104,12 @@ class Tagger {
                     new File(parent, tempFilename).renameTo(new File(parent, filename));
                 }
             } catch (IOException | UnsupportedTagException | InvalidDataException | NotSupportedException e) {
+                console.set("Failed processing MP3 tag. Skipping " + song.getTitle() + " - " + song.getAuthor());
                 e.printStackTrace();
             }
+            workDone++;
+            double progressDouble = ((double) workDone) / songList.size();
+            progress.set(progressDouble);
         }
     }
 
@@ -134,7 +147,7 @@ class Tagger {
                 tag.setAlbumImage(artBytes, mimeType);
             } catch (IOException | IllegalArgumentException e) {
                 e.printStackTrace();
-                System.out.println("Cannot read album art. Skipping album art for " + song.getTitle() + " - " + song.getAuthor());
+                console.set("Cannot read album art. Skipping album art for " + song.getTitle() + " - " + song.getAuthor());
             }
         }
         return tag;
@@ -146,5 +159,9 @@ class Tagger {
 
     ReadOnlyStringProperty textProperty() {
         return progressText;
+    }
+
+    ReadOnlyDoubleProperty progressProperty() {
+        return progress;
     }
 }
