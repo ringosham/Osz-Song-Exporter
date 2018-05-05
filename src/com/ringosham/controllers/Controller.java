@@ -45,6 +45,8 @@ public class Controller {
     private CheckBox filterDuplicates;
     @FXML
     private TextField filterSeconds;
+    @FXML
+    private Button oszExport;
 
     public static File beatmapDir = new File(System.getProperty("user.home") + "/AppData/Local/Osu!/Songs");
 
@@ -150,6 +152,17 @@ public class Controller {
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);
             exporter.execute();
+        }
+    }
+
+    @FXML
+    private void onOszExportClick() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Select export directory");
+        File exportDirectory = chooser.showDialog(pane.getScene().getWindow());
+        if (exportDirectory != null) {
+            consoleArea.clear();
+
         }
     }
 }
