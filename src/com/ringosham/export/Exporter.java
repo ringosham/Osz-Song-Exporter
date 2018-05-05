@@ -60,7 +60,13 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         failCount = 0;
         int copiedCount;
         System.out.println("Started exporting at " + Calendar.getInstance().getTime());
-        System.out.println("Export directory: " + settings.getExportDirectory().getAbsolutePath());
+        //Lesson learned. DO NOT pipe the console to TextArea.
+        //System.out will often sends too many updates (Updates are sent character by character) to the UI, causing it to crash.
+        //FIXME Replace System.out to regular appendText
+        StringBuilder builder = new StringBuilder();
+        builder.append("Export directory: ");
+        builder.append(settings.getExportDirectory().getAbsolutePath());
+        System.out.println(builder);
         publishProgress("text", "Analysing beatmaps...");
         Hasher hasher = new Hasher();
         hasher.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
@@ -71,9 +77,11 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         publishProgress("progress", -1, 1);
         Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds());
         songList = filter.start();
-        System.out.println("---------------------------------");
-        System.out.println("Filtered songs down to " + songList.size() + " songs");
-        System.out.println("---------------------------------");
+        builder = new StringBuilder();
+        builder.append("Filtered songs down to ");
+        builder.append(songList.size());
+        builder.append(" songs");
+        System.out.println(builder);
 
         if (settings.isConvertOgg()) {
             deleteTempDirectory();
@@ -97,14 +105,19 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
 
         //Add tags after copying
         if (settings.isFixEncoding() || settings.isApplyTags()) {
+            publishProgress("progress", -1, 1);
             Tagger tagger = new Tagger(songList, settings.isApplyTags(), settings.isOverrideTags(), settings.isFixEncoding());
             tagger.textProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
+            tagger.start();
         }
-        System.out.println("---------------------------------");
-        System.out.println("Export complete");
-        System.out.println("Total exported songs: " + copiedCount);
-        System.out.println("Total songs that failed to copy: " + failCount);
-        System.out.println("---------------------------------");
+        builder = new StringBuilder();
+        builder.append("Total exported songs: ");
+        builder.append(copiedCount);
+        System.out.println(builder);
+        builder = new StringBuilder();
+        builder.append("Total songs that failed to copy: ");
+        builder.append(failCount);
+        System.out.println(builder);
         publishProgress("text", "Cleaning up...");
         deleteTempDirectory();
         Desktop desktop = Desktop.getDesktop();
@@ -112,6 +125,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
             desktop.open(settings.getExportDirectory());
         } catch (IOException ignored) {
         }
+        publishProgress("progress", 0, 1);
         publishProgress("text", "Ready.");
         return null;
     }

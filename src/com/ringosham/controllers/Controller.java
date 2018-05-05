@@ -159,7 +159,7 @@ public class Controller {
         }
     }
 
-    private class Console extends OutputStream {
+    private static class Console extends OutputStream {
         private TextArea console;
 
         Console(TextArea console) {

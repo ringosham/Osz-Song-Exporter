@@ -56,8 +56,9 @@ class Hasher {
                             unicodeTitle = line.replace("TitleUnicode:", "");
                         if (line.startsWith("ArtistUnicode:"))
                             unicodeAuthor = line.replace("ArtistUnicode:", "");
-                        if (line.matches("0,0,\"(.+)\"")) {
-                            Pattern pattern = Pattern.compile("0,0,\"(.+)\"");
+                        if (line.toLowerCase().matches("\\d,\\d,\"(.+(jpg|png|bmp))\"") ||
+                                line.toLowerCase().matches("\\d,\\d,\"(.+(jpg|png|bmp))\",\\d,\\d")) {
+                            Pattern pattern = Pattern.compile("\\d,\\d,\"(.+)\"");
                             Matcher matcher = pattern.matcher(line);
                             if (matcher.find())
                                 albumArt = new File(beatmap.getAbsolutePath() + "/" + matcher.group(1));

@@ -74,6 +74,7 @@ class Copier {
                 else if (outputFile.length() != song.getFileLocation().length())
                     Files.copy(song.getFileLocation().toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 copiedCount++;
+                song.setOutputFile(outputFile);
             } catch (IOException e) {
                 System.out.println("Failed copying " + song.getTitle() + " - " + song.getAuthor());
                 Exporter.failCount++;

@@ -26,7 +26,7 @@ class Converter {
         int bitrate;
         try {
             VorbisFile ogg = new VorbisFile(song.getFileLocation());
-            bitrate = ogg.getInfo().getBitrateNominal();
+            bitrate = ogg.getInfo().getBitrateLower();
             ogg.close();
         } catch (IOException e) {
             System.out.println("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());

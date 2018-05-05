@@ -14,6 +14,7 @@ public class Song {
     private boolean isFullVersion;
     private File albumArt;
     private String beatmapID;
+    private File outputFile;
 
     public Song(String hash, File fileLocation, String title, String author, long duration, String unicodeTitle, String unicodeAuthor, File albumArt, boolean isOgg) {
         this.hash = hash;
@@ -84,5 +85,13 @@ public class Song {
 
     public String getBeatmapID() {
         return beatmapID;
+    }
+
+    public void setOutputFile(File outputFile) {
+        this.outputFile = outputFile;
+    }
+
+    public File getOutputFile() {
+        return outputFile;
     }
 }
