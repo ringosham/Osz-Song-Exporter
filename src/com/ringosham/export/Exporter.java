@@ -51,6 +51,10 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
                 double max = ((Number) params[2]).doubleValue();
                 ui.progress.setProgress(workDone / max);
                 break;
+            case "console":
+                String consoleText = (String) params[1];
+                ui.consoleArea.appendText(consoleText + "\n");
+                break;
             default:
         }
     }
@@ -59,14 +63,13 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
     public Void doInBackground(Void... params) {
         failCount = 0;
         int copiedCount;
-        System.out.println("Started exporting at " + Calendar.getInstance().getTime());
+        publishProgress("console", "Started exporting at " + Calendar.getInstance().getTime());
         //Lesson learned. DO NOT pipe the console to TextArea.
         //System.out will often sends too many updates (Updates are sent character by character) to the UI, causing it to crash.
-        //FIXME Replace System.out to regular appendText
         StringBuilder builder = new StringBuilder();
         builder.append("Export directory: ");
         builder.append(settings.getExportDirectory().getAbsolutePath());
-        System.out.println(builder);
+        publishProgress("console", builder.toString());
         publishProgress("text", "Analysing beatmaps...");
         Hasher hasher = new Hasher();
         hasher.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
@@ -81,7 +84,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         builder.append("Filtered songs down to ");
         builder.append(songList.size());
         builder.append(" songs");
-        System.out.println(builder);
+        publishProgress("console", builder);
 
         if (settings.isConvertOgg()) {
             deleteTempDirectory();
@@ -113,11 +116,11 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         builder = new StringBuilder();
         builder.append("Total exported songs: ");
         builder.append(copiedCount);
-        System.out.println(builder);
+        publishProgress("console", builder);
         builder = new StringBuilder();
         builder.append("Total songs that failed to copy: ");
         builder.append(failCount);
-        System.out.println(builder);
+        publishProgress("console", builder);
         publishProgress("text", "Cleaning up...");
         deleteTempDirectory();
         Desktop desktop = Desktop.getDesktop();

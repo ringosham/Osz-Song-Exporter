@@ -10,8 +10,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
-import java.io.OutputStream;
-import java.io.PrintStream;
 
 public class Controller {
     //All UI elements
@@ -93,10 +91,6 @@ public class Controller {
             else
                 Platform.exit();
         }
-        //Console output
-        Console console = new Console(consoleArea);
-        PrintStream stream = new PrintStream(console, true);
-        System.setOut(stream);
         //Console auto scroll
         consoleArea.textProperty().addListener((observable, oldValue, newValue) -> consoleArea.setScrollTop(Double.MAX_VALUE));
         if (!beatmapDir.canRead()) {
@@ -156,19 +150,6 @@ public class Controller {
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);
             exporter.execute();
-        }
-    }
-
-    private static class Console extends OutputStream {
-        private TextArea console;
-
-        Console(TextArea console) {
-            this.console = console;
-        }
-
-        @Override
-        public void write(int b) {
-            console.appendText(String.valueOf((char) b));
         }
     }
 }
