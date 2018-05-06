@@ -23,7 +23,9 @@ The above features are fully configurable!
 ## Compiling
 Just compile it with Intellij. That's it.
 
-The Java compiler is a little bit buggy. UI elements may not work on first time compile. In this case, just recompile until it works.
+## Download
+Go to the [release](https://github.com/ringosham/Osu-Exporter/releases) tab.
+
 ## Things to note
 Depending on how many beatmaps you have, the process may take from less than 30 seconds to more than 5 minutes.
 
