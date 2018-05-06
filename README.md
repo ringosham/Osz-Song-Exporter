@@ -17,7 +17,7 @@ Do not use this program for distributing songs illegally. The creator of this pr
 * Filter practice songs
 * **Filter any similar songs with the same names to prevent duplicates** (Extremely useful for saving space and if you have a large amount of beatmaps) 
 * Conversion from ogg to mp3 (Conversion is done via FFmpeg, included in the program)
-* Fixing encoding to old mp3 tags (Very old mp3s don't use UTF-8, which is why the song shows up as "????" in your music player)
+* Attempt to fix encoding to old mp3 tags (Very old mp3s don't use UTF-8, which is why the song shows up as "????" in your music player. A corrupted ID3 tag will also cause this issue.)
 
 The above features are fully configurable!
 ##Compiling

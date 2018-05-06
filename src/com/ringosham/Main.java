@@ -13,7 +13,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //TODO Export as osz (Of course this disables all options)
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(appTitle);
         alert.setHeaderText("Disclaimer");
