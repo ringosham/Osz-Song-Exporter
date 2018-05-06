@@ -2,6 +2,7 @@ package com.ringosham.controllers;
 
 import com.ringosham.Main;
 import com.ringosham.export.Exporter;
+import com.ringosham.export.OszExport;
 import com.ringosham.objects.Settings;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -46,7 +47,7 @@ public class Controller {
     @FXML
     private TextField filterSeconds;
     @FXML
-    private Button oszExport;
+    public Button oszExport;
 
     public static File beatmapDir = new File(System.getProperty("user.home") + "/AppData/Local/Osu!/Songs");
 
@@ -162,7 +163,8 @@ public class Controller {
         File exportDirectory = chooser.showDialog(pane.getScene().getWindow());
         if (exportDirectory != null) {
             consoleArea.clear();
-
+            OszExport export = new OszExport(this, exportDirectory);
+            export.execute();
         }
     }
 }

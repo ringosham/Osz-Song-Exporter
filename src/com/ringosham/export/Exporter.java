@@ -36,6 +36,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
     @Override
     public void onPreExecute() {
         ui.exportButton.setDisable(true);
+        ui.oszExport.setDisable(true);
     }
 
     @Override
@@ -66,6 +67,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         publishProgress("console", "Started exporting at " + Calendar.getInstance().getTime());
         //Lesson learned. DO NOT pipe the console to TextArea.
         //System.out will often sends too many updates (Updates are sent character by character) to the UI, causing it to crash.
+        //Don't ask me why it happens. Even I have no idea why it throws NullPointerExceptions.
         StringBuilder builder = new StringBuilder();
         builder.append("Export directory: ");
         builder.append(settings.getExportDirectory().getAbsolutePath());
@@ -140,5 +142,6 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
     @Override
     public void onPostExecute(Void params) {
         ui.exportButton.setDisable(false);
+        ui.oszExport.setDisable(false);
     }
 }

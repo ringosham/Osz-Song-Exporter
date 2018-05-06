@@ -24,8 +24,8 @@
     <ProgressBar fx:id="progress" prefHeight="18.0" prefWidth="396.0" progress="0.0" />
     <Separator prefHeight="31.0" prefWidth="314.0" visible="false" />
     <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportButtonClick" text="Export songs" />
-   <Separator prefHeight="0.0" prefWidth="328.0" visible="false" />
-   <Button fx:id="oszExport" mnemonicParsing="false" onAction="#onOszExportClick" text="Export osz" />
+   <Separator prefHeight="1.0" prefWidth="294.0" visible="false" />
+   <Button fx:id="oszExport" mnemonicParsing="false" onAction="#onOszExportClick" text="Export beatmaps" />
    <Separator orientation="VERTICAL" prefHeight="3.0" prefWidth="394.0" visible="false" />
    <Label text="Hover the cursor on the options to see the description!" />
     <GridPane prefHeight="120.0" prefWidth="396.0">
