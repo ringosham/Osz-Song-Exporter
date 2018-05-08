@@ -1,4 +1,4 @@
-# Osu! Exporter
+# Osz song exporter
 A simple utility for exporting all songs and beatmaps (in .osz form) with a single click from your osu! library.
 
 I find it funny that most of these utility software I found in Github either don't work or lacking in features. So I decided to make one myself!

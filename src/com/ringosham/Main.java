@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    public static final String appTitle = "Osu! Exporter by Ringosham";
+    public static final String appTitle = "Osz song exporter by Ringosham";
 
     @Override
     public void start(Stage stage) throws Exception {
