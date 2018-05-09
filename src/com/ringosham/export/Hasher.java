@@ -12,6 +12,7 @@ import org.gagravarr.vorbis.VorbisFile;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +40,7 @@ class Hasher {
             //We only need to look for one single beatmap file. This doesn't need to loop
             for (File osuFile : Objects.requireNonNull(beatmap.listFiles(pathname -> pathname.getName().endsWith(".osu")))) {
                 try {
-                    BufferedReader reader = new BufferedReader(new FileReader(osuFile));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(osuFile), StandardCharsets.UTF_8));
                     String line;
                     String hash = null;
                     File fileLocation = null;
