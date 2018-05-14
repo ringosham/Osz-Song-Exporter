@@ -3,7 +3,7 @@ A simple utility for exporting all songs and beatmaps (in .osz form) with a sing
 
 I find it funny that most of these utility software I found in Github either don't work or lacking in features. So I decided to make one myself!
 ## Disclaimer
-This program only copies, as well as converting songs that are already stored the user's computer. The copied and converted files are stored in the user's device only. These songs are intended for personal use only. The user, however, is allowed to do anything with the files under the confines of copyright laws. The author of this program cannot prevent the user from performing any copyright infringing actions. Therefore, in no event shall the author be liable for any copyright infringement claims. The user is the only one liable for such actions.
+This program only copies, and depending on the settings made by the user, converts and modifies the ID3 tags of songs that are already stored the user's (The individual operating this program) computer. The copied and/or modified files are stored in the user's device only. These songs are intended for personal use only and can be manipulated by the user in any way they wish. The author of this program cannot prevent the user from performing any copyright infringing actions with the files produced by the program. Therefore, in no event shall the author be liable for any copyright infringement claims. The user should only use these files under the confines of copyright laws.
 
 This program, although requires the rhythm game "Osu!" to function, it is not affiliated with the person/company developed the game.
 
