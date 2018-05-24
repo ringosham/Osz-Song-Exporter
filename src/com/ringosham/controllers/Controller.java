@@ -80,6 +80,9 @@ public class Controller {
         overwriteCheckbox.setTooltip(new Tooltip(overwriteTooltip));
 
         //Some checks to make sure stuff works
+        //Unofficial macOS port of osu!
+        if (System.getProperty("os.name").toLowerCase().contains("mac"))
+            beatmapDir = new File("/Application/osu!.app/drive_c/Program Files/osu!/Songs");
         if (!beatmapDir.isDirectory()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(Main.appTitle);
