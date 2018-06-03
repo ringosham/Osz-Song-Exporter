@@ -6,7 +6,6 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import org.apache.tika.parser.txt.CharsetDetector;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -27,18 +26,16 @@ class Tagger {
     private List<Song> songList;
     private boolean applyTags;
     private boolean overrideTags;
-    private boolean fixEncoding;
     private ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
 
     ReadOnlyStringProperty consoleProperty() {
         return console;
     }
 
-    Tagger(List<Song> songList, boolean applyTags, boolean overrideTags, boolean fixEncoding) {
+    Tagger(List<Song> songList, boolean applyTags, boolean overrideTags) {
         this.songList = songList;
         this.applyTags = applyTags;
         this.overrideTags = overrideTags;
-        this.fixEncoding = fixEncoding;
     }
 
     void start() {
@@ -56,35 +53,26 @@ class Tagger {
                     changesMade = true;
                 }
                 else {
-                    if (mp3.hasId3v1Tag())
+                    String artist = null;
+                    String title = null;
+                    if (mp3.hasId3v1Tag()) {
+                        ID3v1 v1Tag = mp3.getId3v1Tag();
+                        artist = v1Tag.getArtist();
+                        title = v1Tag.getTitle();
                         mp3.removeId3v1Tag();
+                    }
                     if (mp3.hasId3v2Tag()) {
                         v2Tag = mp3.getId3v2Tag();
-                        String artist = v2Tag.getArtist();
-                        String title = v2Tag.getTitle();
+                        if (artist == null)
+                            artist = v2Tag.getArtist();
+                        if (title == null)
+                            title = v2Tag.getTitle();
                         if ((title == null || artist == null) && applyTags) {
                             applyTags(mp3, song);
                             changesMade = true;
                         }
                         else if ((title.isEmpty() || artist.isEmpty()) && applyTags) {
                             applyTags(mp3, song);
-                            changesMade = true;
-                        }
-                        if (fixEncoding && !changesMade) {
-                            if (song.getUnicodeTitle() == null)
-                                progressText.set("Fixing encoding on " + song.getTitle() + " - " + song.getAuthor());
-                            else
-                                progressText.set("Fixing encoding on " + song.getUnicodeTitle() + " - " + song.getUnicodeAuthor());
-                            CharsetDetector detector = new CharsetDetector();
-                            artist = detector.getString(artist.getBytes(), "utf-8");
-                            title = detector.getString(title.getBytes(), "utf-8");
-                            ID3v24Tag tag = new ID3v24Tag();
-                            tag.setTitle(title);
-                            tag.setArtist(artist);
-                            tag.setAlbumImage(v2Tag.getAlbumImage(), v2Tag.getAlbumImageMimeType());
-                            tag.setAlbum(v2Tag.getAlbum());
-                            tag.setAlbumArtist(v2Tag.getAlbumArtist());
-                            mp3.setId3v2Tag(tag);
                             changesMade = true;
                         }
                     } else {

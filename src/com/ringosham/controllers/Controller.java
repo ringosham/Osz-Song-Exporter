@@ -35,8 +35,6 @@ public class Controller {
     @FXML
     private CheckBox overrideTags;
     @FXML
-    private CheckBox fixEncoding;
-    @FXML
     private ToggleGroup renameOptions;
     @FXML
     private RadioButton renameBeatmap;
@@ -58,7 +56,6 @@ public class Controller {
         //UI initialization
         String convertTooltip = "Some old beatmaps may use ogg files instead of mp3. Disabling this will ensure audio quality, " +
                 "but your music player will likely not able to read ogg tags (Album arts and song info)";
-        String encodingTooltip = "Some very old mp3s have different encoding in their tags. This is why some songs appear as ????? in your music player";
         String addTagTooltip = "Automatically add mp3 tags based on beatmap info to the exported songs";
         String overrideTooltip = "Overrides the existing mp3 tag, in case you don't like it.";
         String useIDTooltip = "Includes the beatmap ID in the file name. Ensures there are no file conflicts, " +
@@ -70,7 +67,6 @@ public class Controller {
                 "Highly recommended if you have a lot of beatmaps.";
         String overwriteTooltip = "Overwrite the file even if it already exists. Otherwise it will overwrite if the file sizes are different";
         convertCheckbox.setTooltip(new Tooltip(convertTooltip));
-        fixEncoding.setTooltip(new Tooltip(encodingTooltip));
         overrideTags.setTooltip(new Tooltip(overrideTooltip));
         useBeatmapID.setTooltip(new Tooltip(useIDTooltip));
         filterPractice.setTooltip(new Tooltip(practiseTooltip));
@@ -151,7 +147,7 @@ public class Controller {
             else
                 seconds = Integer.parseInt(filterSeconds.getText());
             Settings settings = new Settings(convertCheckbox.isSelected(), filterPractice.isSelected(), overwriteCheckbox.isSelected(),
-                    addTags.isSelected(), overrideTags.isSelected(), fixEncoding.isSelected(), renameAsBeatmap,
+                    addTags.isSelected(), overrideTags.isSelected(), renameAsBeatmap,
                     filterDuplicates.isSelected(), seconds, exportDirectory);
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);

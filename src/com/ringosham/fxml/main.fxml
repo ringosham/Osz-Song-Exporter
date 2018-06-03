@@ -51,7 +51,6 @@
            </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="useBeatmapID" mnemonicParsing="false" text="Using beatmap ID (Deprecated)" toggleGroup="$renameOptions" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-        <CheckBox fx:id="fixEncoding" mnemonicParsing="false" text="Fix mp3 tag encoding" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <CheckBox fx:id="overwriteCheckbox" mnemonicParsing="false" text="Overwrite existing copy" GridPane.columnIndex="1" />
     </GridPane>
    <CheckBox fx:id="filterDuplicates" mnemonicParsing="false" onAction="#onFilterDuplicatesChecked" text="Filter duplicate songs if their length difference is less than " />

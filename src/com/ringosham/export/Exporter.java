@@ -112,8 +112,8 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         copiedCount = copier.start();
 
         //Add tags after copying
-        if (settings.isFixEncoding() || settings.isApplyTags()) {
-            Tagger tagger = new Tagger(songList, settings.isApplyTags(), settings.isOverrideTags(), settings.isFixEncoding());
+        if (settings.isApplyTags()) {
+            Tagger tagger = new Tagger(songList, settings.isApplyTags(), settings.isOverrideTags());
             tagger.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
             tagger.textProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
             tagger.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));
