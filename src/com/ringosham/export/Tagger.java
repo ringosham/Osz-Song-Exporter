@@ -55,6 +55,7 @@ class Tagger {
                 else {
                     String artist = null;
                     String title = null;
+                    //This will preserve some data from old ID3v1 tags, but it will be overwritten with ID3v2 to support album arts.
                     if (mp3.hasId3v1Tag()) {
                         ID3v1 v1Tag = mp3.getId3v1Tag();
                         artist = v1Tag.getArtist();

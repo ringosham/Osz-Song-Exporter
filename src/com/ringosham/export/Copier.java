@@ -29,16 +29,18 @@ class Copier {
     private boolean overwrite;
     private File exportDirectory;
     private boolean filterDuplicates;
-    
+    private boolean romanjiNaming;
+
     ReadOnlyStringProperty consoleProperty() {
         return console;
     }
-    Copier(List<Song> songList, boolean renameAsBeatmap, boolean overwrite, File exportDirectory, boolean filterDuplicates) {
+    Copier(List<Song> songList, boolean renameAsBeatmap, boolean overwrite, File exportDirectory, boolean filterDuplicates, boolean romanjiNaming) {
         this.songList = songList;
         this.renameAsBeatmap = renameAsBeatmap;
         this.overwrite = overwrite;
         this.exportDirectory = exportDirectory;
         this.filterDuplicates = filterDuplicates;
+        this.romanjiNaming = romanjiNaming;
     }
 
     int start() {
@@ -46,7 +48,7 @@ class Copier {
             String filename;
             if (renameAsBeatmap) {
                 if (song.getUnicodeTitle() != null && song.getUnicodeAuthor() != null)
-                    if (song.getUnicodeTitle().isEmpty() && song.getUnicodeAuthor().isEmpty())
+                    if (song.getUnicodeTitle().isEmpty() && song.getUnicodeAuthor().isEmpty() && !romanjiNaming)
                         filename = song.getTitle() + " - " + song.getAuthor();
                     else
                         filename = song.getUnicodeTitle() + " - " + song.getUnicodeAuthor();
@@ -92,6 +94,7 @@ class Copier {
     }
 
     //Remove any illegal characters in the file name
+    //Many export programs I have seen forgot to eliminate illegal characters from the file name
     private String getValidFileName(String name) {
         return name.replaceAll("\\*", "").replaceAll("<", "").replaceAll(">", "")
                 .replaceAll("\\|", "").replaceAll("\\?", "").replaceAll(":", "")

@@ -46,6 +46,8 @@ public class Controller {
     private TextField filterSeconds;
     @FXML
     public Button oszExport;
+    @FXML
+    private CheckBox romanjiNaming;
 
     public static File beatmapDir = new File(System.getProperty("user.home") + "/AppData/Local/Osu!/Songs");
 
@@ -66,6 +68,7 @@ public class Controller {
         String filterTooltip = "The program will try to differentiate full length songs and TV size songs through the length of the song. " +
                 "Highly recommended if you have a lot of beatmaps.";
         String overwriteTooltip = "Overwrite the file even if it already exists. Otherwise it will overwrite if the file sizes are different";
+        String romanjiTooltip = "Rename the song after romanji instead of its Japanese/other languages' name. This has no effect if \"Using beatmap ID\" is selected.";
         convertCheckbox.setTooltip(new Tooltip(convertTooltip));
         overrideTags.setTooltip(new Tooltip(overrideTooltip));
         useBeatmapID.setTooltip(new Tooltip(useIDTooltip));
@@ -74,6 +77,7 @@ public class Controller {
         renameBeatmap.setTooltip(new Tooltip(renameTooltip));
         addTags.setTooltip(new Tooltip(addTagTooltip));
         overwriteCheckbox.setTooltip(new Tooltip(overwriteTooltip));
+        romanjiNaming.setTooltip(new Tooltip(romanjiTooltip));
 
         //Some checks to make sure stuff works
         //Unofficial macOS port of osu!
@@ -93,6 +97,7 @@ public class Controller {
             else
                 Platform.exit();
         }
+
         //Console auto scroll
         consoleArea.textProperty().addListener((observable, oldValue, newValue) -> consoleArea.setScrollTop(Double.MAX_VALUE));
         if (!beatmapDir.canRead()) {
@@ -103,6 +108,8 @@ public class Controller {
             alert.showAndWait();
             Platform.exit();
         }
+
+        //Default options and status text
         progressText.setText("Ready. " + beatmapDir.listFiles(File::isDirectory).length + " songs found. (Estimate)");
         overrideTags.setDisable(true);
         filterPractice.setSelected(true);
@@ -114,6 +121,7 @@ public class Controller {
         });
     }
 
+    //Toggle stuff
     @FXML
     private void onAddTagChecked() {
         if (!addTags.isSelected()) {
@@ -147,7 +155,7 @@ public class Controller {
             else
                 seconds = Integer.parseInt(filterSeconds.getText());
             Settings settings = new Settings(convertCheckbox.isSelected(), filterPractice.isSelected(), overwriteCheckbox.isSelected(),
-                    addTags.isSelected(), overrideTags.isSelected(), renameAsBeatmap,
+                    addTags.isSelected(), overrideTags.isSelected(), renameAsBeatmap, romanjiNaming.isSelected(),
                     filterDuplicates.isSelected(), seconds, exportDirectory);
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);

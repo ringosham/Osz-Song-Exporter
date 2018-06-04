@@ -11,11 +11,12 @@ public class Settings {
     private boolean overrideTags;
     private boolean renameAsBeatmap;
     private boolean filterDuplicates;
+    private boolean romanjiNaming;
     private int filterSeconds;
     private File exportDirectory;
 
 
-    public Settings(boolean convertOgg, boolean filterPractice, boolean overwrite, boolean applyTags, boolean overrideTags, boolean renameAsBeatmap, boolean filterDuplicates, int filterSeconds, File exportDirectory) {
+    public Settings(boolean convertOgg, boolean filterPractice, boolean overwrite, boolean applyTags, boolean overrideTags, boolean renameAsBeatmap, boolean filterDuplicates, boolean romanjiNaming, int filterSeconds, File exportDirectory) {
         this.convertOgg = convertOgg;
         this.filterPractice = filterPractice;
         this.overwrite = overwrite;
@@ -23,6 +24,7 @@ public class Settings {
         this.overrideTags = overrideTags;
         this.renameAsBeatmap = renameAsBeatmap;
         this.filterDuplicates = filterDuplicates;
+        this.romanjiNaming = romanjiNaming;
         this.filterSeconds = filterSeconds;
         this.exportDirectory = exportDirectory;
     }
@@ -61,5 +63,9 @@ public class Settings {
 
     public boolean isOverwrite() {
         return overwrite;
+    }
+
+    public boolean isRomanjiNaming() {
+        return romanjiNaming;
     }
 }
