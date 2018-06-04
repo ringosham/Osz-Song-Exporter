@@ -106,7 +106,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         }
 
         //The copier handles the renaming as well
-        Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite(), settings.getExportDirectory(), settings.isFilterDuplicates(), settings.isRomanjiNaming());
+        Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite(), settings.getExportDirectory(), settings.isFilterDuplicates(), settings.isRomajiNaming());
         copier.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
         copier.progressTextProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
         copier.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));

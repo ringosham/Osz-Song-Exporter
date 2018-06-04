@@ -47,7 +47,7 @@ public class Controller {
     @FXML
     public Button oszExport;
     @FXML
-    private CheckBox romanjiNaming;
+    private CheckBox romajiNaming;
 
     public static File beatmapDir = new File(System.getProperty("user.home") + "/AppData/Local/Osu!/Songs");
 
@@ -68,7 +68,7 @@ public class Controller {
         String filterTooltip = "The program will try to differentiate full length songs and TV size songs through the length of the song. " +
                 "Highly recommended if you have a lot of beatmaps.";
         String overwriteTooltip = "Overwrite the file even if it already exists. Otherwise it will overwrite if the file sizes are different";
-        String romanjiTooltip = "Rename the song after romanji instead of its Japanese/other languages' name. This has no effect if \"Using beatmap ID\" is selected.";
+        String romajiTooltip = "Rename the song after romaji instead of its Japanese/other languages' name. This has no effect if \"Using beatmap ID\" is selected.";
         convertCheckbox.setTooltip(new Tooltip(convertTooltip));
         overrideTags.setTooltip(new Tooltip(overrideTooltip));
         useBeatmapID.setTooltip(new Tooltip(useIDTooltip));
@@ -77,7 +77,7 @@ public class Controller {
         renameBeatmap.setTooltip(new Tooltip(renameTooltip));
         addTags.setTooltip(new Tooltip(addTagTooltip));
         overwriteCheckbox.setTooltip(new Tooltip(overwriteTooltip));
-        romanjiNaming.setTooltip(new Tooltip(romanjiTooltip));
+        romajiNaming.setTooltip(new Tooltip(romajiTooltip));
 
         //Some checks to make sure stuff works
         //Unofficial macOS port of osu!
@@ -155,7 +155,7 @@ public class Controller {
             else
                 seconds = Integer.parseInt(filterSeconds.getText());
             Settings settings = new Settings(convertCheckbox.isSelected(), filterPractice.isSelected(), overwriteCheckbox.isSelected(),
-                    addTags.isSelected(), overrideTags.isSelected(), renameAsBeatmap, romanjiNaming.isSelected(),
+                    addTags.isSelected(), overrideTags.isSelected(), renameAsBeatmap, romajiNaming.isSelected(),
                     filterDuplicates.isSelected(), seconds, exportDirectory);
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);
