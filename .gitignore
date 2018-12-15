@@ -2,8 +2,6 @@
 ### Java template
 # Compiled class file
 # Log file
-*.log
-
 # BlueJ files
 *.ctxt
 
@@ -74,4 +72,5 @@ fabric.properties
 .idea/httpRequests
 
 .idea/artifacts/
+.idea/codeStyles/**
 src/com/ringosham/com/

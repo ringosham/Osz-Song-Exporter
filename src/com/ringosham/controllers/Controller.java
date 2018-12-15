@@ -90,8 +90,8 @@ public class Controller {
             alert.setContentText("Cannot find osu! installation. Please select your osu! installation folder.");
             alert.showAndWait();
             DirectoryChooser chooser = new DirectoryChooser();
-            chooser.setTitle("Select osu! install directory");
-            File newBeatmapDir = chooser.showDialog(pane.getScene().getWindow());
+            chooser.setTitle("Select osu! song directory");
+            File newBeatmapDir = chooser.showDialog(null);
             if (newBeatmapDir != null)
                 beatmapDir = newBeatmapDir;
             else
