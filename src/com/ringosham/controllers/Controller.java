@@ -48,6 +48,8 @@ public class Controller {
     public Button oszExport;
     @FXML
     private CheckBox romajiNaming;
+    @FXML
+    private CheckBox mirrorOutput;
 
     public static File beatmapDir = new File(System.getProperty("user.home") + "/AppData/Local/Osu!/Songs");
 
@@ -69,6 +71,7 @@ public class Controller {
                 "Highly recommended if you have a lot of beatmaps.";
         String overwriteTooltip = "Overwrite the file even if it already exists. Otherwise it will overwrite if the file sizes are different";
         String romajiTooltip = "Rename the song after romaji instead of its Japanese/other languages' name. This has no effect if \"Using beatmap ID\" is selected.";
+        String mirrorTooltip = "Synchronize songs between the export and the folder. Any songs not belong to the output will be deleted.";
         convertCheckbox.setTooltip(new Tooltip(convertTooltip));
         overrideTags.setTooltip(new Tooltip(overrideTooltip));
         useBeatmapID.setTooltip(new Tooltip(useIDTooltip));
@@ -78,6 +81,7 @@ public class Controller {
         addTags.setTooltip(new Tooltip(addTagTooltip));
         overwriteCheckbox.setTooltip(new Tooltip(overwriteTooltip));
         romajiNaming.setTooltip(new Tooltip(romajiTooltip));
+        mirrorOutput.setTooltip(new Tooltip(mirrorTooltip));
 
         //Some checks to make sure stuff works
         //Unofficial macOS port of osu!
@@ -156,7 +160,7 @@ public class Controller {
                 seconds = Integer.parseInt(filterSeconds.getText());
             Settings settings = new Settings(convertCheckbox.isSelected(), filterPractice.isSelected(), overwriteCheckbox.isSelected(),
                     addTags.isSelected(), overrideTags.isSelected(), renameAsBeatmap, romajiNaming.isSelected(),
-                    filterDuplicates.isSelected(), seconds, exportDirectory);
+                    filterDuplicates.isSelected(), mirrorOutput.isSelected(), seconds, exportDirectory);
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);
             exporter.execute();

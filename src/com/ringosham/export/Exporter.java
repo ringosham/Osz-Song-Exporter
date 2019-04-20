@@ -130,6 +130,8 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         publishProgress("console", builder.toString());
         publishProgress("text", "Cleaning up...");
         deleteTempDirectory();
+        if (settings.isMirrorOutput())
+            mirror(songList, settings.getExportDirectory());
         Desktop desktop = Desktop.getDesktop();
         try {
             desktop.open(settings.getExportDirectory());
@@ -138,6 +140,20 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         publishProgress("progress", 0, 1);
         publishProgress("text", "Ready.");
         return null;
+    }
+
+    private void mirror(List<Song> songList, File outputFolder) {
+        for (File file : outputFolder.listFiles()) {
+            boolean exists = false;
+            for (Song song : songList) {
+                if (song.getOutputFile().equals(file)) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists)
+                file.delete();
+        }
     }
 
     @Override
