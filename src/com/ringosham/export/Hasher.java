@@ -2,13 +2,13 @@ package com.ringosham.export;
 
 import com.ringosham.controllers.Controller;
 import com.ringosham.objects.Song;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.MultimediaInfo;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import org.gagravarr.vorbis.VorbisFile;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -52,7 +52,7 @@ class Hasher {
                     long duration;
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("AudioFilename: "))
-                            fileLocation = new File(beatmap.getAbsolutePath() + "/" + line.replace("AudioFilename: ", ""));
+                            fileLocation = new File(beatmap, line.replace("AudioFilename: ", ""));
                         if (line.startsWith("AudioHash: "))
                             hash = line.replace("AudioHash: ", "");
                         if (line.startsWith("Title:"))
@@ -72,7 +72,6 @@ class Hasher {
                             break;
                         }
                     }
-
                     //Hashing is mandatory to remove completely identical songs
                     if (hash == null) {
                         FileInputStream stream;
@@ -91,32 +90,16 @@ class Hasher {
                         }
                     }
                     reader.close();
-
                     //Determining song length
-                    if (fileLocation.getName().toLowerCase().endsWith(".mp3")) {
-                        Media mediaFile = new Media(fileLocation.toURI().toString());
-                        MediaPlayer player = new MediaPlayer(mediaFile);
-                        String finalTitle = title;
-                        String finalAuthor = author;
-                        player.setOnError(() -> {
-                            Exporter.failCount++;
-                            console.set("Failed reading MP3: " + finalTitle + " - " + finalAuthor);
-                            player.getError().printStackTrace();
-                            player.dispose();
-                        });
-                        while (player.getStatus() == MediaPlayer.Status.UNKNOWN)
-                            Thread.sleep(1);
-                        if (player.getStatus() != MediaPlayer.Status.DISPOSED)
-                            duration = (long) mediaFile.getDuration().toSeconds();
-                        else
-                            break;
-                        song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, false));
-                    } else {
-                        VorbisFile vorbisFile = new VorbisFile(fileLocation);
-                        //Nominal bitrate is not accurate enough. About 10 seconds in error
-                        duration = (fileLocation.length() * 8) / vorbisFile.getInfo().getBitrateNominal();
-                        vorbisFile.close();
-                        song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, true));
+                    try {
+                        Encoder encoder = new Encoder();
+                        MultimediaInfo info = encoder.getInfo(fileLocation);
+                        duration = info.getDuration() / 1000;
+                        song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, fileLocation.getName().toLowerCase().endsWith(".ogg")));
+                    } catch (EncoderException e) {
+                        Exporter.failCount++;
+                        console.set("Failed reading MP3: " + title + " - " + author);
+                        e.printStackTrace();
                     }
                 } catch (Exception e) {
                     console.set("Failed reading beatmap: " + beatmap.getName());
