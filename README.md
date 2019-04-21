@@ -29,9 +29,11 @@ Go to the [release](https://github.com/ringosham/Osu-Exporter/releases) tab.
 ## Things to note
 Depending on how many beatmaps you have, the process may take from less than 30 seconds to more than 5 minutes.
 
-This program is only tested in Windows 64-bit, but it should work on all operating systems.
+This program is only tested in Windows 64-bit, but it should work on all Linux distributions.
 
-The FFmpeg binary is only 32-bit in Linux and macOS. Please make sure you have the dependencies for conversion.
+It is **NOT** compatible with macOS.
+
+The FFmpeg binary is only 32-bit in Linux. Please make sure you have the dependencies for conversion.
 ## License
 ```
 Copyright © 2018 Ringosham
