@@ -17,6 +17,7 @@ Do not use this program for distributing songs illegally. The creator of this pr
 * Filter practice songs
 * **Filter any similar songs with the same names to prevent duplicates** (Extremely useful for saving space and if you have a large amount of beatmaps) 
 * Conversion from ogg to mp3 (Conversion is done via FFmpeg, included in the program)
+* osu library synchronisation if you frequently update your song library
 
 The above features are fully configurable!
 ## Compiling
