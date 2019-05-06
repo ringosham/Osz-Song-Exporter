@@ -35,7 +35,7 @@ This program is only tested in Windows 64-bit, but it should work on all Linux d
 
 It is **NOT** compatible with macOS.
 
-The FFmpeg binary is only 32-bit in Linux. Please make sure you have the dependencies for conversion.
+The FFmpeg binary is only 32-bit in Linux. Please make sure you have the dependencies for 32-bit compatibility.
 ## License
 ```
 Copyright © 2018 Ringosham
