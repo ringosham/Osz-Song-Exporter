@@ -61,5 +61,3 @@ Copyright © 2018 Ringosham
 [JavaFX AsyncTask](https://github.com/victorlaerte/javafx-asynctask) - AsyncTask in JavaFX - Under Apache License 2.0
 
 [mp3agic](https://github.com/mpatric/mp3agic) - Java library for reading/manipulating ID3 tags - Under MIT License
-
-[Tika parser](https://tika.apache.org) - Content analysis toolkit - Under Apache License 2.0
