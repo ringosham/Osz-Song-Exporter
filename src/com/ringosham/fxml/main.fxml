@@ -46,6 +46,9 @@
    <CheckBox fx:id="filterDuplicates" mnemonicParsing="false" onAction="#onFilterDuplicatesChecked" text="Filter duplicate songs if their length difference is less than " />
    <TextField fx:id="filterSeconds" prefHeight="25.0" prefWidth="29.0" />
    <Label text=" seconds" />
+   <CheckBox fx:id="filterFarm" mnemonicParsing="false" onAction="#onFilterFarmChecked" text="Filter songs less than " />
+   <TextField fx:id="filterFarmSeconds" prefHeight="25.0" prefWidth="29.0" />
+   <Label text=" seconds" />
    <Separator orientation="VERTICAL" prefHeight="9.0" prefWidth="13.0" visible="false" />
    <TextArea fx:id="consoleArea" editable="false" prefHeight="94.0" prefWidth="410.0" wrapText="true">
       <font>

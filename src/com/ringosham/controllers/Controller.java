@@ -50,6 +50,10 @@ public class Controller {
     private CheckBox romajiNaming;
     @FXML
     private CheckBox mirrorOutput;
+    @FXML
+    private CheckBox filterFarm;
+    @FXML
+    private TextField filterFarmSeconds;
 
     public static File beatmapDir = new File(System.getProperty("user.home") + "/AppData/Local/Osu!/Songs");
 
@@ -72,6 +76,7 @@ public class Controller {
         String overwriteTooltip = "Overwrite the file even if it already exists. Otherwise it will overwrite if the file sizes are different";
         String romajiTooltip = "Rename the song after romaji instead of its Japanese/other languages' name. This has no effect if \"Using beatmap ID\" is selected.";
         String mirrorTooltip = "Synchronize songs between the export and the folder. Any songs not belong to the output will be deleted.";
+        String filterFarmTooltip = "Filter maps shorter than your specified length";
         convertCheckbox.setTooltip(new Tooltip(convertTooltip));
         overrideTags.setTooltip(new Tooltip(overrideTooltip));
         useBeatmapID.setTooltip(new Tooltip(useIDTooltip));
@@ -82,6 +87,7 @@ public class Controller {
         overwriteCheckbox.setTooltip(new Tooltip(overwriteTooltip));
         romajiNaming.setTooltip(new Tooltip(romajiTooltip));
         mirrorOutput.setTooltip(new Tooltip(mirrorTooltip));
+        filterFarm.setTooltip(new Tooltip(filterFarmTooltip));
 
         //Some checks to make sure stuff works
         //Unofficial macOS port of osu!
@@ -118,11 +124,17 @@ public class Controller {
         overrideTags.setDisable(true);
         filterPractice.setSelected(true);
         filterDuplicates.setSelected(true);
+        filterFarm.setSelected(true);
         filterSeconds.setText("10");
         filterSeconds.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 2 || !newValue.matches("\\d*") || newValue.equals("0"))
                 filterSeconds.setText(oldValue);
         });
+        filterFarmSeconds.setText("60");
+        filterFarmSeconds.textProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue.length() > 2 || !newValue.matches("\\d*") || newValue.equals("0"))
+                filterFarmSeconds.setText(oldValue);
+        }));
     }
 
     //Toggle stuff
@@ -147,20 +159,45 @@ public class Controller {
     }
 
     @FXML
+    private void onFilterFarmChecked() {
+        if (filterFarm.isSelected())
+            filterFarmSeconds.setDisable(false);
+        else {
+            filterFarmSeconds.setText("");
+            filterFarmSeconds.setDisable(true);
+        }
+    }
+
+    @FXML
     private void onExportButtonClick() {
+        if (filterDuplicates.isSelected() && filterSeconds.getText().trim().isEmpty()) {
+            filterSeconds.requestFocus();
+            filterSeconds.setStyle("-fx-text-box-boarder: red; -fx-focus-color: red");
+            return;
+        }
+        if (filterFarm.isSelected() && filterFarmSeconds.getText().trim().isEmpty()) {
+            filterFarmSeconds.requestFocus();
+            filterFarmSeconds.setStyle("-fx-text-box-boarder: red; -fx-focus-color: red");
+            return;
+        }
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Select export directory");
         File exportDirectory = chooser.showDialog(pane.getScene().getWindow());
         if (exportDirectory != null) {
             boolean renameAsBeatmap = ((RadioButton) renameOptions.getSelectedToggle()).getText().equals("Rename after beatmap");
             int seconds;
+            int farmSeconds;
             if (!filterDuplicates.isSelected())
                 seconds = 0;
             else
                 seconds = Integer.parseInt(filterSeconds.getText());
+            if (!filterFarm.isSelected())
+                farmSeconds = 0;
+            else
+                farmSeconds = Integer.parseInt(filterFarmSeconds.getText());
             Settings settings = new Settings(convertCheckbox.isSelected(), filterPractice.isSelected(), overwriteCheckbox.isSelected(),
                     addTags.isSelected(), overrideTags.isSelected(), renameAsBeatmap, romajiNaming.isSelected(),
-                    filterDuplicates.isSelected(), mirrorOutput.isSelected(), seconds, exportDirectory);
+                    filterDuplicates.isSelected(), mirrorOutput.isSelected(), filterFarm.isSelected(), farmSeconds, seconds, exportDirectory);
             consoleArea.clear();
             Exporter exporter = new Exporter(this, settings);
             exporter.execute();

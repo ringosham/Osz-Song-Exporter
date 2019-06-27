@@ -16,8 +16,10 @@ Do not use this program for distributing songs illegally. The creator of this pr
 * Export all beatmaps as .osz or just the songs
 * Proper file renaming (or rename it after beatmap ID if you really want to)
 * Adding MP3 tags based on beatmap info
-* Filter practice songs
-* **Filter any similar songs with the same names to prevent duplicates** (Extremely useful for saving space and if you have a large amount of beatmaps) 
+* Filters!
+    * Practice songs
+    * By song length (Skip any ~60 second farm maps. Unless you really like hearing haitai)
+    * Similar songs with the same names to prevent duplicates (Extremely useful for saving space and if you have a large amount of beatmaps) 
 * Conversion from ogg to mp3 (Conversion is done via FFmpeg, included in the program)
 * osu library synchronisation if you frequently update your song library
 

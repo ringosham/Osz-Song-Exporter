@@ -4,20 +4,22 @@ import java.io.File;
 
 public class Settings {
 
-    private boolean convertOgg;
-    private boolean filterPractice;
-    private boolean overwrite;
-    private boolean applyTags;
-    private boolean overrideTags;
-    private boolean renameAsBeatmap;
-    private boolean filterDuplicates;
-    private boolean romajiNaming;
-    private boolean mirrorOutput;
-    private int filterSeconds;
-    private File exportDirectory;
+    private final boolean convertOgg;
+    private final boolean filterPractice;
+    private final boolean overwrite;
+    private final boolean applyTags;
+    private final boolean overrideTags;
+    private final boolean renameAsBeatmap;
+    private final boolean filterDuplicates;
+    private final boolean romajiNaming;
+    private final boolean mirrorOutput;
+    private final boolean filterFarm;
+    private final int farmSeconds;
+    private final int filterSeconds;
+    private final File exportDirectory;
 
 
-    public Settings(boolean convertOgg, boolean filterPractice, boolean overwrite, boolean applyTags, boolean overrideTags, boolean renameAsBeatmap, boolean romajiNaming, boolean filterDuplicates, boolean mirrorOutput, int filterSeconds, File exportDirectory) {
+    public Settings(boolean convertOgg, boolean filterPractice, boolean overwrite, boolean applyTags, boolean overrideTags, boolean renameAsBeatmap, boolean romajiNaming, boolean filterDuplicates, boolean mirrorOutput, boolean filterFarm, int farmSeconds, int filterSeconds,  File exportDirectory) {
         this.convertOgg = convertOgg;
         this.filterPractice = filterPractice;
         this.overwrite = overwrite;
@@ -27,6 +29,8 @@ public class Settings {
         this.filterDuplicates = filterDuplicates;
         this.romajiNaming = romajiNaming;
         this.mirrorOutput = mirrorOutput;
+        this.filterFarm = filterFarm;
+        this.farmSeconds = farmSeconds;
         this.filterSeconds = filterSeconds;
         this.exportDirectory = exportDirectory;
     }
@@ -73,5 +77,13 @@ public class Settings {
 
     public boolean isMirrorOutput() {
         return mirrorOutput;
+    }
+
+    public boolean isFilterFarm() {
+        return filterFarm;
+    }
+
+    public int getFarmSeconds() {
+        return farmSeconds;
     }
 }

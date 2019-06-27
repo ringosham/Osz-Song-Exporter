@@ -2,16 +2,24 @@ package com.ringosham.export;
 
 import com.ringosham.objects.Song;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class Filter {
 
-    private List<Song> songList = new ArrayList<>();
-    private boolean filterPractice;
-    private boolean filterDuplicates;
-    private int filterSeconds;
+    private final boolean filterFarm;
+    private final int farmSeconds;
+    private final boolean filterPractice;
+    private final boolean filterDuplicates;
+    private final int filterSeconds;
+    private List<Song> songList;
 
-    public Filter(List<Song> songList, boolean filterPractice, boolean filterDuplicates, int filterSeconds) {
+    public Filter(List<Song> songList, boolean filterPractice, boolean filterDuplicates, int filterSeconds, boolean filterFarm, int farmSeconds) {
+        this.songList = songList;
+        this.filterFarm = filterFarm;
+        this.farmSeconds = farmSeconds;
         this.songList.addAll(songList);
         this.filterPractice = filterPractice;
         this.filterDuplicates = filterDuplicates;
@@ -38,11 +46,18 @@ public class Filter {
                     if (title.contains(filter))
                         return true;
                     if (unicodeTitle != null)
-                        if (unicodeTitle.contains(filter) && !unicodeTitle.isEmpty())
+                        if (unicodeTitle.contains(filter))
                             return true;
                 }
                 return false;
             });
+        }
+
+        //Filter based on song length
+        if (filterFarm) {
+            for (Song song : songList)
+                if (song.getDuration() < farmSeconds)
+                    songList.remove(song);
         }
 
         //Filter duplicates based on the length of the file

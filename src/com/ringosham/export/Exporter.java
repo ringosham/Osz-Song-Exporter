@@ -82,7 +82,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
 
         publishProgress("text", "Filtering beatmaps...");
         publishProgress("progress", -1, 1);
-        Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds());
+        Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds(), settings.isFilterFarm(), settings.getFarmSeconds());
         songList = filter.start();
         builder = new StringBuilder();
         builder.append("Filtered songs down to ");
