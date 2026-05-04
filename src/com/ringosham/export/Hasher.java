@@ -53,6 +53,8 @@ class Hasher {
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("AudioFilename: "))
                             fileLocation = new File(beatmap, line.replace("AudioFilename: ", ""));
+                        else if (line.startsWith("AudioFilename:"))
+                            fileLocation = new File(beatmap, line.replace("AudioFilename:", ""));
                         if (line.startsWith("AudioHash: "))
                             hash = line.replace("AudioHash: ", "");
                         if (line.startsWith("Title:"))

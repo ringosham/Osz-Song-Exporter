@@ -2,8 +2,9 @@ package com.ringosham.export;
 
 import com.ringosham.objects.Song;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +35,41 @@ public class Filter {
         songList.clear();
         songList.addAll(songMap.values());
 
+        //Filter duplicates based on the length of the file
+        if (filterDuplicates) {
+            Map<String, List<Song>> titleToSongs = new HashMap<>();
+            for (Song song : songList) {
+                String key = song.getTitle().toLowerCase().trim();
+                titleToSongs.computeIfAbsent(key, k -> new ArrayList<>()).add(song);
+            }
+            List<Song> result = new ArrayList<>();
+
+            for (List<Song> group : titleToSongs.values()) {
+                if (group.size() == 1) {
+                    result.add(group.get(0));
+                } else {
+                    group.sort(Comparator.comparingLong(Song::getDuration));
+                    List<Song> filtered = new ArrayList<>();
+                    filtered.add(group.get(0));
+                    for (int i = 1; i < group.size(); i++) {
+                        if (group.get(i).getDuration() - filtered.get(filtered.size() - 1).getDuration() >= filterSeconds) {
+                            filtered.add(group.get(i));
+                        }
+                    }
+                    if (filtered.size() > 1) {
+                        filtered.get(filtered.size() - 1).setFullVersion(true);
+                    }
+                    result.addAll(filtered);
+                }
+            }
+
+            songList.clear();
+            songList.addAll(result);
+        }
+
         //Filter practice maps - Any beatmaps that are titled stream practice and jump practice
         if (filterPractice) {
-            songList.removeIf(song ->  {
+            songList.removeIf(song -> {
                 String title = song.getTitle().trim().toLowerCase();
                 String unicodeTitle = null;
                 if (song.getUnicodeTitle() != null)
@@ -55,37 +88,10 @@ public class Filter {
 
         //Filter based on song length
         if (filterFarm) {
-            for (Song song : songList)
-                if (song.getDuration() < farmSeconds)
-                    songList.remove(song);
+            songList.removeIf(song -> song.getDuration() < farmSeconds);
         }
 
-        //Filter duplicates based on the length of the file
-        if (filterDuplicates) {
-            int j = songList.size();
-            for (int i = 0; i < j; i++) {
-                Iterator<Song> iterator = songList.iterator();
-                for (int k = 0; k < i + 1; k++)
-                    iterator.next();
-                while (iterator.hasNext()) {
-                    Song songA = songList.get(i);
-                    Song songB = iterator.next();
-                    //System.out.println(songA.getTitle() + " -------- " + songB.getTitle());
-                    if (songA.getTitle().toLowerCase().trim().equals(songB.getTitle().toLowerCase().trim())) {
-                        if (Math.abs(songA.getDuration() - songB.getDuration()) < filterSeconds) {
-                            iterator.remove();
-                        }
-                        else {
-                            if (songA.getDuration() > songB.getDuration())
-                                songA.setFullVersion(true);
-                            else
-                                songB.setFullVersion(true);
-                        }
-                    }
-                }
-                j = songList.size();
-            }
-        }
+
         return songList;
     }
 }
