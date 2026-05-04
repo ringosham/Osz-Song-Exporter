@@ -18,18 +18,18 @@ class Copier {
 
     private final ReadOnlyStringWrapper progressText = new ReadOnlyStringWrapper();
     private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
-    private ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
+    private final ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
 
     private int copiedCount = 0;
     private int workDone = 0;
-    private Map<String, Integer> dupCount = new HashMap<>();
+    private final Map<String, Integer> dupCount = new HashMap<>();
 
-    private List<Song> songList;
-    private boolean renameAsBeatmap;
-    private boolean overwrite;
-    private File exportDirectory;
-    private boolean filterDuplicates;
-    private boolean romajiNaming;
+    private final List<Song> songList;
+    private final boolean renameAsBeatmap;
+    private final boolean overwrite;
+    private final File exportDirectory;
+    private final boolean filterDuplicates;
+    private final boolean romajiNaming;
 
     ReadOnlyStringProperty consoleProperty() {
         return console;

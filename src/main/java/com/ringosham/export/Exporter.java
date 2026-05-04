@@ -13,8 +13,8 @@ import java.util.List;
 
 public class Exporter extends AsyncTask<Void, Object, Void> {
     //Constructor
-    private Controller ui;
-    private Settings settings;
+    private final Controller ui;
+    private final Settings settings;
 
     //Status
     static int failCount = 0;
@@ -71,7 +71,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         //Don't ask me why it happens. Even I have no idea why it throws NullPointerExceptions.
         StringBuilder builder = new StringBuilder();
         builder.append("Export directory: ");
-        builder.append(settings.getExportDirectory().getAbsolutePath());
+        builder.append(settings.exportDirectory().getAbsolutePath());
         publishProgress("console", builder.toString());
         publishProgress("text", "Analysing beatmaps...");
         Hasher hasher = new Hasher();
@@ -82,7 +82,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
 
         publishProgress("text", "Filtering beatmaps...");
         publishProgress("progress", -1, 1);
-        Filter filter = new Filter(songList, settings.isFilterPractice(), settings.isFilterDuplicates(), settings.getFilterSeconds(), settings.isFilterFarm(), settings.getFarmSeconds());
+        Filter filter = new Filter(songList, settings.filterPractice(), settings.filterDuplicates(), settings.filterSeconds(), settings.filterFarm(), settings.farmSeconds());
         songList = filter.start();
         builder = new StringBuilder();
         builder.append("Filtered songs down to ");
@@ -90,7 +90,7 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         builder.append(" songs");
         publishProgress("console", builder.toString());
 
-        if (settings.isConvertOgg()) {
+        if (settings.convertOgg()) {
             deleteTempDirectory();
             for (Song song : songList) {
                 if (song.isOgg()) {
@@ -106,15 +106,15 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         }
 
         //The copier handles the renaming as well
-        Copier copier = new Copier(songList, settings.isRenameAsBeatmap(), settings.isOverwrite(), settings.getExportDirectory(), settings.isFilterDuplicates(), settings.isRomajiNaming());
+        Copier copier = new Copier(songList, settings.renameAsBeatmap(), settings.overwrite(), settings.exportDirectory(), settings.filterDuplicates(), settings.romajiNaming());
         copier.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
         copier.progressTextProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
         copier.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));
         copiedCount = copier.start();
 
         //Add tags after copying
-        if (settings.isApplyTags()) {
-            Tagger tagger = new Tagger(songList, settings.isApplyTags(), settings.isOverrideTags());
+        if (settings.applyTags()) {
+            Tagger tagger = new Tagger(songList, settings.applyTags(), settings.overrideTags());
             tagger.progressProperty().addListener(((observable, oldValue, newValue) -> publishProgress("progress", newValue.doubleValue(), 1)));
             tagger.textProperty().addListener(((observable, oldValue, newValue) -> publishProgress("text", newValue)));
             tagger.consoleProperty().addListener(((observable, oldValue, newValue) -> publishProgress("console", newValue)));
@@ -130,11 +130,11 @@ public class Exporter extends AsyncTask<Void, Object, Void> {
         publishProgress("console", builder.toString());
         publishProgress("text", "Cleaning up...");
         deleteTempDirectory();
-        if (settings.isMirrorOutput())
-            mirror(songList, settings.getExportDirectory());
+        if (settings.mirrorOutput())
+            mirror(songList, settings.exportDirectory());
         Desktop desktop = Desktop.getDesktop();
         try {
-            desktop.open(settings.getExportDirectory());
+            desktop.open(settings.exportDirectory());
         } catch (IOException ignored) {
         }
         publishProgress("progress", 0, 1);

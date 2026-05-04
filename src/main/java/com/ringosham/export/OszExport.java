@@ -12,8 +12,8 @@ import java.util.zip.ZipOutputStream;
 public class OszExport extends AsyncTask<Void, Object, Void> {
 
 
-    private Controller ui;
-    private File exportDirectory;
+    private final Controller ui;
+    private final File exportDirectory;
 
     public OszExport(Controller ui, File exportDirectory) {
         this.ui = ui;

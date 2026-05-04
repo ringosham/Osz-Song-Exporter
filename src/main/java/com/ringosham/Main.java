@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class Main extends Application {
 
     public static final String appTitle = "Osz song exporter by Ringosham";
@@ -21,7 +23,7 @@ public class Main extends Application {
                 "2. The creator of this program will not be responsible for your actions while using this program";
         alert.setContentText(disclaimer);
         alert.showAndWait();
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/main.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/ringosham/fxml/main.fxml")));
         stage.setTitle(appTitle);
         stage.setScene(new Scene(root));
         stage.setResizable(false);

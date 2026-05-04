@@ -15,7 +15,7 @@ public class Filter {
     private final boolean filterPractice;
     private final boolean filterDuplicates;
     private final int filterSeconds;
-    private List<Song> songList;
+    private final List<Song> songList;
 
     public Filter(List<Song> songList, boolean filterPractice, boolean filterDuplicates, int filterSeconds, boolean filterFarm, int farmSeconds) {
         this.songList = songList;

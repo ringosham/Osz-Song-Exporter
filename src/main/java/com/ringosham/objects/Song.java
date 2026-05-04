@@ -3,17 +3,17 @@ package com.ringosham.objects;
 import java.io.File;
 
 public class Song {
-    private String hash;
+    private final String hash;
     private File fileLocation;
-    private String title;
-    private String author;
-    private long duration;
-    private String unicodeTitle;
-    private String unicodeAuthor;
-    private boolean isOgg;
+    private final String title;
+    private final String author;
+    private final long duration;
+    private final String unicodeTitle;
+    private final String unicodeAuthor;
+    private final boolean isOgg;
     private boolean isFullVersion;
-    private File albumArt;
-    private String beatmapID;
+    private final File albumArt;
+    private final String beatmapID;
     private File outputFile;
 
     public Song(String hash, File fileLocation, String title, String author, long duration, String unicodeTitle, String unicodeAuthor, File albumArt, boolean isOgg) {

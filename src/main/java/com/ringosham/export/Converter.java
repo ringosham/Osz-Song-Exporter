@@ -1,9 +1,14 @@
 package com.ringosham.export;
 
 import com.ringosham.objects.Song;
-import it.sauronsoftware.jave.*;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import ws.schild.jave.Encoder;
+import ws.schild.jave.EncoderException;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.info.MultimediaInfo;
 
 import java.io.File;
 import java.util.UUID;
@@ -11,8 +16,8 @@ import java.util.UUID;
 class Converter {
 
     static final File convertDir = new File(System.getProperty("java.io.tmpdir") + "/convertOgg");
-    private Song song;
-    private ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
+    private final Song song;
+    private final ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
     
     ReadOnlyStringProperty consoleProperty() {
         return console;
@@ -28,16 +33,18 @@ class Converter {
         int bitrate;
         File output;
         try {
+            MultimediaObject multimediaObject = new MultimediaObject(song.getFileLocation());
             Encoder encoder = new Encoder();
-            MultimediaInfo info = encoder.getInfo(song.getFileLocation());
+            MultimediaInfo info = multimediaObject.getInfo();
             bitrate = info.getAudio().getBitRate();
             AudioAttributes audioInfo = new AudioAttributes();
+            audioInfo.setCodec("libmp3lame");
             audioInfo.setBitRate(bitrate);
             EncodingAttributes attributes = new EncodingAttributes();
             attributes.setAudioAttributes(audioInfo);
-            attributes.setFormat("mp3");
-            output = new File(convertDir.getAbsolutePath(), UUID.randomUUID().toString() + ".mp3");
-            encoder.encode(song.getFileLocation(), output, attributes);
+            attributes.setOutputFormat("mp3");
+            output = new File(convertDir.getAbsolutePath(), UUID.randomUUID() + ".mp3");
+            encoder.encode(multimediaObject, output, attributes);
         } catch (EncoderException e) {
             console.set("Failed reading ogg file. Keeping ogg format: " + song.getTitle() + " - " + song.getAuthor());
             e.printStackTrace();

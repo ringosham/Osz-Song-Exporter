@@ -23,10 +23,10 @@ class Tagger {
     private final ReadOnlyStringWrapper progressText = new ReadOnlyStringWrapper();
     private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
 
-    private List<Song> songList;
-    private boolean applyTags;
-    private boolean overrideTags;
-    private ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
+    private final List<Song> songList;
+    private final boolean applyTags;
+    private final boolean overrideTags;
+    private final ReadOnlyStringWrapper console = new ReadOnlyStringWrapper();
 
     ReadOnlyStringProperty consoleProperty() {
         return console;

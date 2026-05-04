@@ -2,13 +2,13 @@ package com.ringosham.export;
 
 import com.ringosham.controllers.Controller;
 import com.ringosham.objects.Song;
-import it.sauronsoftware.jave.Encoder;
-import it.sauronsoftware.jave.EncoderException;
-import it.sauronsoftware.jave.MultimediaInfo;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import ws.schild.jave.EncoderException;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.info.MultimediaInfo;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -94,8 +94,8 @@ class Hasher {
                     reader.close();
                     //Determining song length
                     try {
-                        Encoder encoder = new Encoder();
-                        MultimediaInfo info = encoder.getInfo(fileLocation);
+                        MultimediaObject multimediaObject = new MultimediaObject(fileLocation);
+                        MultimediaInfo info = multimediaObject.getInfo();
                         duration = info.getDuration() / 1000;
                         song.add(new Song(hash, fileLocation, title, author, duration, unicodeTitle, unicodeAuthor, albumArt, fileLocation.getName().toLowerCase().endsWith(".ogg")));
                     } catch (EncoderException e) {
