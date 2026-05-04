@@ -5,7 +5,7 @@
 
     <groupId>com.ringosham</groupId>
     <artifactId>osz-song-exporter</artifactId>
-    <version>1.0</version>
+    <version>1.6</version>
     <name>Osz song exporter</name>
     <description>A utility for exporting songs and beatmaps from an osu! library.</description>
 
